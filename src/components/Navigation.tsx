@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-import logo from "@/assets/ELS_LOGO_PNG.png";
+import logo from "@/assets/els_logo_transparent_bg.png";
 
 const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
