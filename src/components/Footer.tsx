@@ -87,7 +87,7 @@ const Footer = () => {
         </div>        
         
         <div className="border-t border-gray-700 mt-6 md:mt-8 pt-4 md:pt-6 text-center text-gray-300">
-          <p className="text-xs md:text-sm">&copy; 2025 Professional Laundry. All rights reserved.</p>
+          <p className="text-xs md:text-sm">&copy; 2025 Elegant Laundry Solutions. All rights reserved.</p>
         </div>
       </div>
     </footer>

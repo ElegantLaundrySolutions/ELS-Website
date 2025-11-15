@@ -34,11 +34,11 @@ const Navigation = () => {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled 
-          ? 'bg-white/95 backdrop-blur-md shadow-elegant border-b border-border' 
-          : 'bg-transparent'
-      }`}>
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 transform-gpu will-change-transform ${
+          isScrolled
+            ? 'bg-white/95 backdrop-blur-md shadow-elegant border-b border-border'
+            : 'bg-white/95 backdrop-blur-md'
+        }`}>
         <div className="content-container">
           <div className="flex items-center justify-between h-16 md:h-20">
             <img
@@ -125,9 +125,6 @@ const Navigation = () => {
           </div>
         </div>
       )}
-
-      {/* Spacer for fixed nav */}
-      <div className="h-16 md:h-14" />
     </>
   );
 };
