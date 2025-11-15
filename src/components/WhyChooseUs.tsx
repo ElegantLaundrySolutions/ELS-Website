@@ -35,7 +35,7 @@ const features = [
 
 const WhyChooseUs = () => {
   return (
-    <section className="mobile-spacing section-bg-muted">
+    <section id="why-choose-us" className="mobile-spacing section-bg-muted">
       <div className="content-container">
         <div className="text-center mb-8 md:mb-12 reveal">
           <h2 className="heading-lg mb-4 text-foreground">

@@ -20,7 +20,7 @@ const Navigation = () => {
     { name: 'About', href: '#about' },
     { name: 'Services', href: '#services' },
     { name: 'Why Choose Us', href: '#why-choose-us' },
-    { name: 'Gallery', href: '#gallery' },
+    // { name: 'Gallery', href: '#gallery' },
     { name: 'Contact', href: '#contact' }
   ];
 
