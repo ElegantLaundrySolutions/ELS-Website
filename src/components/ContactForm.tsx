@@ -6,7 +6,7 @@ import { Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
 
 const ContactForm = () => {
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e:any) => {
     e.preventDefault();
 
     const name = e.target.name.value;
