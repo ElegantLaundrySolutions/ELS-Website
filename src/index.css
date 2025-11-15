@@ -1,0 +1,412 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Classic elegant base colors */
+    --background: 210 10% 99%;
+    --foreground: 215 25% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 215 25% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 25% 15%;
+
+    /* Sophisticated blue-grey palette */
+    --primary: 215 45% 35%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 215 25% 92%;
+    --primary-dark: 215 50% 25%;
+
+    --secondary: 210 15% 94%;
+    --secondary-foreground: 215 25% 15%;
+
+    --muted: 210 12% 95%;
+    --muted-foreground: 215 15% 45%;
+
+    --accent: 215 20% 90%;
+    --accent-foreground: 215 25% 15%;
+
+    /* Trust and success colors */
+    --trust: 200 45% 40%;
+    --trust-foreground: 0 0% 100%;
+    --trust-light: 200 25% 94%;
+
+    --success: 145 55% 40%;
+    --success-foreground: 0 0% 100%;
+    --success-light: 145 25% 94%;
+
+    /* Warm accent for highlights */
+    --warm-accent: 25 45% 55%;
+    --warm-accent-light: 25 25% 92%;
+
+    /* Elegant gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(215 45% 35%) 0%, hsl(215 50% 25%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(215 45% 35% / 0.95) 0%, hsl(200 45% 40% / 0.95) 100%);
+    --gradient-subtle: linear-gradient(180deg, hsl(210 10% 99%) 0%, hsl(210 12% 96%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(25 45% 55% / 0.1) 0%, hsl(215 25% 92% / 0.3) 100%);
+    
+    /* Refined shadows */
+    --shadow-soft: 0 2px 20px -4px hsl(215 20% 20% / 0.08);
+    --shadow-elegant: 0 8px 40px -8px hsl(215 25% 20% / 0.12);
+    --shadow-premium: 0 16px 60px -12px hsl(215 30% 20% / 0.18);
+
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 215 15% 88%;
+    --input: 215 15% 88%;
+    --ring: 215 45% 35%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 210 10% 98%;
+    --sidebar-foreground: 215 25% 15%;
+    --sidebar-primary: 215 45% 35%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 210 15% 94%;
+    --sidebar-accent-foreground: 215 25% 15%;
+    --sidebar-border: 215 15% 88%;
+    --sidebar-ring: 215 45% 35%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-inter;
+    font-feature-settings: 'cv11', 'ss01';
+    font-variation-settings: 'opsz' 32;
+  }
+}
+
+@layer components {
+  /* Layout utilities */
+  .content-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .section-padding {
+    @apply py-16 lg:py-24;
+  }
+
+  /* Typography hierarchy - Mobile optimized for elegance */
+  .heading-xl {
+    @apply text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight;
+  }
+  
+  .heading-lg {
+    @apply text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight leading-tight;
+  }
+  
+  .heading-md {
+    @apply text-xl md:text-2xl lg:text-3xl font-semibold tracking-tight leading-tight;
+  }
+  
+  .heading-sm {
+    @apply text-lg md:text-xl lg:text-2xl font-medium tracking-tight leading-tight;
+  }
+  
+  .text-lead {
+    @apply text-sm md:text-base lg:text-lg text-muted-foreground leading-relaxed;
+  }
+
+  /* Mobile-specific typography - reduced sizes */
+  .hero-title {
+    @apply text-2xl md:text-3xl lg:text-5xl font-bold tracking-tight leading-tight;
+  }
+  
+  .hero-subtitle {
+    @apply text-sm md:text-base lg:text-lg text-muted-foreground leading-relaxed;
+  }
+
+  /* Elegant card components with 2-column mobile layout */
+  .card-premium {
+    @apply bg-card border border-border rounded-2xl shadow-elegant hover:shadow-premium transition-all duration-500;
+  }
+  
+  .card-hover {
+    @apply hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300;
+  }
+  
+  .service-card {
+    @apply p-4 md:p-6 lg:p-8 rounded-2xl bg-card border border-border shadow-elegant hover:shadow-premium transition-all duration-500 hover:border-primary/20;
+  }
+  
+  .industry-card {
+    @apply p-3 md:p-4 lg:p-6 rounded-2xl bg-card border border-border hover:bg-accent hover:border-primary/20 transition-all duration-300 shadow-soft;
+  }
+
+  /* Mobile grid layouts - 2 columns on mobile */
+  .mobile-grid-2 {
+    @apply grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6;
+  }
+  
+  .service-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8;
+  }
+  
+  .industry-grid {
+    @apply grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6;
+  }
+
+  /* Mobile-specific utilities */
+  .mobile-button {
+    @apply w-full sm:w-auto px-6 py-3 text-sm md:text-base min-h-[44px] rounded-xl transition-all duration-300 shadow-soft hover:shadow-elegant;
+  }
+  
+  .mobile-icon {
+    @apply w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12;
+  }
+  
+  .mobile-spacing {
+    @apply py-8 md:py-12 lg:py-20;
+  }
+  
+  /* Enhanced backgrounds */
+  .section-bg-warm {
+    background: var(--gradient-warm);
+  }
+  
+  .section-bg-subtle {
+    background: var(--gradient-subtle);
+  }
+
+  .section-bg-muted {
+    @apply bg-muted/30;
+  }
+
+  .content-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Enhanced Layout Grids */
+  .mobile-grid-2 {
+    @apply grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8;
+  }
+
+  .service-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8;
+  }
+
+  .service-grid-mobile {
+    @apply grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4;
+  }
+
+  .industry-grid {
+    @apply grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 lg:gap-8;
+  }
+
+  .why-choose-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10;
+  }
+
+  /* Enhanced Cards */
+  .card-premium {
+    @apply bg-card border border-border rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300;
+  }
+
+  .card-hover:hover {
+    @apply transform -translate-y-2 shadow-2xl scale-[1.02];
+  }
+
+  .service-card {
+    @apply card-premium p-4 md:p-6 lg:p-8 hover:shadow-2xl transition-all duration-500;
+  }
+
+  .service-card-mobile {
+    @apply card-premium p-3 md:p-4 hover:shadow-xl transition-all duration-300;
+  }
+
+  .industry-card {
+    @apply card-premium p-6 md:p-8 lg:p-10 hover:shadow-2xl;
+  }
+
+  .why-choose-card {
+    @apply card-premium p-6 md:p-8 lg:p-10 hover:shadow-2xl;
+  }
+
+  /* Enhanced Icons */
+  .mobile-icon {
+    @apply w-10 h-10 md:w-14 md:h-14 lg:w-16 lg:h-16;
+  }
+
+  /* Scroll Animations */
+  .scroll-fade-in {
+    @apply opacity-0 translate-y-12 transition-all duration-700 ease-out;
+  }
+
+  .scroll-fade-in.visible {
+    @apply opacity-100 translate-y-0;
+  }
+
+  .scroll-slide-left {
+    @apply opacity-0 -translate-x-12 transition-all duration-700 ease-out;
+  }
+
+  .scroll-slide-left.visible {
+    @apply opacity-100 translate-x-0;
+  }
+
+  .scroll-slide-right {
+    @apply opacity-0 translate-x-12 transition-all duration-700 ease-out;
+  }
+
+  .scroll-slide-right.visible {
+    @apply opacity-100 translate-x-0;
+  }
+
+  .parallax-slow {
+    @apply transition-transform duration-1000 ease-out;
+  }
+
+  /* Enhanced Hover Effects */
+  .button-hover {
+    @apply relative overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg;
+  }
+
+  .button-hover::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-white/20 to-transparent transform -skew-x-12 -translate-x-full transition-transform duration-500;
+  }
+
+  .button-hover:hover::before {
+    @apply translate-x-full;
+  }
+
+  /* Card Glow Effects */
+  .card-glow {
+    @apply relative;
+  }
+
+  .card-glow::before {
+    content: '';
+    @apply absolute -inset-1 bg-gradient-to-r from-primary/20 via-transparent to-primary/20 rounded-2xl opacity-0 transition-opacity duration-500 blur-sm;
+  }
+
+  .card-glow:hover::before {
+    @apply opacity-100;
+  }
+
+  /* Animation Classes */
+  .reveal {
+    @apply opacity-0 translate-y-8 transition-all duration-700 ease-out;
+  }
+
+  .reveal.animate {
+    @apply opacity-100 translate-y-0;
+  }
+  
+  /* Enhanced transitions and animations */
+  .transition-elegant {
+    @apply transition-all duration-500 ease-out;
+  }
+  
+  .fade-in-up {
+    @apply animate-fade-in;
+  }
+  
+  /* Smooth scrolling enhancement */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  .section-bg-muted {
+    @apply bg-muted/30;
+  }
+
+  /* Animation utilities */
+  .reveal {
+    @apply opacity-0 translate-y-6 transition-all duration-700;
+    animation: reveal 0.7s ease-out forwards;
+  }
+  
+  .fade-in {
+    @apply opacity-0 transition-opacity duration-1000;
+    animation: fadeIn 1s ease-out forwards;
+  }
+  
+  .scale-in {
+    @apply opacity-0 scale-95 transition-all duration-500;
+    animation: scaleIn 0.5s ease-out forwards;
+  }
+  
+  .slide-up {
+    @apply opacity-0 translate-y-8 transition-all duration-700;
+    animation: slideUp 0.7s ease-out forwards;
+  }
+}
+
+@keyframes reveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
