@@ -79,7 +79,7 @@ const Footer = () => {
                   href="mailto:elegantlaundarysolutions@gmail.com"
                   className="text-xs break-all hover:underline inline-block"
                 >
-                  elegantlaundarysolutions@gmail.com
+                  elegantlaundrysolutions@gmail.com
                 </a>
               </div>
             </div>
