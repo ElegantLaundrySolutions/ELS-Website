@@ -302,31 +302,85 @@ const Gallery = () => {
           {/* Photos Grid */}
           <div>
             <h3 className="text-lg font-semibold mb-4 text-center text-foreground">Our Work</h3>
-            <div className="grid grid-cols-2 gap-3">
-              {photoItems.slice(0, 4).map((item, index) => (
-                <div 
-                  key={index}
-                  className="group relative overflow-hidden rounded-xl cursor-pointer transform transition-all duration-300 active:scale-95"
-                  onClick={() => setSelectedItem({src: item.src, type: item.type, title: item.title})}
-                >
-                  <div className="aspect-square relative overflow-hidden">
-                    <img
-                      src={item.src}
-                      alt={item.alt}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-black/20 group-active:bg-black/40 transition-all duration-200" />
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
-                      <span className="inline-block px-2 py-1 text-xs font-medium bg-white/20 backdrop-blur-sm rounded-full mb-1">
-                        {item.category}
-                      </span>
-                      <h3 className="font-medium text-white text-xs leading-tight">{item.title}</h3>
-                    </div>
+
+            <Carousel 
+              className="w-full"
+              plugins={[
+                Autoplay({
+                  delay: 2000,
+                }),
+              ]}
+              opts={{
+                align: "center",
+                loop: true,
+              }}
+            >
+              <CarouselContent>
+                {/* One slide = 4 images in a grid */}
+                <CarouselItem className="basis-full">
+                  <div className="grid grid-cols-2 gap-3">
+                    {photoItems.slice(0, 4).map((item, index) => (
+                      <div 
+                        key={index}
+                        className="group relative overflow-hidden rounded-xl cursor-pointer transform transition-all duration-300 active:scale-95"
+                        onClick={() => setSelectedItem({src: item.src, type: item.type, title: item.title})}
+                      >
+                        <div className="aspect-square relative overflow-hidden">
+                          <img
+                            src={item.src}
+                            alt={item.alt}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-black/20 group-active:bg-black/40 transition-all duration-200" />
+                          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
+                            <span className="inline-block px-2 py-1 text-xs font-medium bg-white/20 backdrop-blur-sm rounded-full mb-1">
+                              {item.category}
+                            </span>
+                            <h3 className="font-medium text-white text-xs leading-tight">{item.title}</h3>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                </div>
-              ))}
-            </div>
+                </CarouselItem>
+
+                {/* EXTRA SLIDES (optional): show next 4, next 4… */}
+                {photoItems.length > 4 && (
+                  <CarouselItem className="basis-full">
+                    <div className="grid grid-cols-2 gap-3">
+                      {photoItems.slice(4, 8).map((item, index) => (
+                        <div 
+                          key={index}
+                          className="group relative overflow-hidden rounded-xl cursor-pointer transform transition-all duration-300 active:scale-95"
+                          onClick={() => setSelectedItem({src: item.src, type: item.type, title: item.title})}
+                        >
+                          <div className="aspect-square relative overflow-hidden">
+                            <img
+                              src={item.src}
+                              alt={item.alt}
+                              className="w-full h-full object-cover"
+                            />
+                            <div className="absolute inset-0 bg-black/20 group-active:bg-black/40 transition-all duration-200" />
+                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
+                              <span className="inline-block px-2 py-1 text-xs font-medium bg-white/20 backdrop-blur-sm rounded-full mb-1">
+                                {item.category}
+                              </span>
+                              <h3 className="font-medium text-white text-xs leading-tight">{item.title}</h3>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CarouselItem>
+                )}
+
+              </CarouselContent>
+{/* 
+              <CarouselPrevious className="left-2" />
+              <CarouselNext className="right-2" /> */}
+            </Carousel>
           </div>
+
 
           {/* Videos Slider */}
           <div>
@@ -364,11 +418,11 @@ const Gallery = () => {
 
                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
-                        <div className="absolute inset-0 flex items-center justify-center">
+                        {/* <div className="absolute inset-0 flex items-center justify-center">
                           <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
                             <Play className="w-5 h-5 text-white" fill="white" />
                           </div>
-                        </div>
+                        </div> */}
 
                         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
                           <span className="inline-block px-2 py-1 text-xs font-medium bg-white/20 backdrop-blur-sm rounded-full mb-1">
