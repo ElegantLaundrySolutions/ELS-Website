@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { X, Play } from "lucide-react";
 import {
   Carousel,
@@ -14,79 +14,177 @@ const Gallery = () => {
 
   const photoItems = [
     {
-      src: "/api/placeholder/600/400",
+      src: "/gallery/building.png",
       type: "image" as const,
-      alt: "Modern laundry facility",
-      title: "State-of-the-Art Facility",
+      alt: "Front view of Elegant Laundry Solutions facility in Goa",
+      title: "Laundry Facility Exterior",
       category: "Facility"
     },
     {
-      src: "/api/placeholder/600/400", 
+      src: "/gallery/img_8993.png",
       type: "image" as const,
-      alt: "Stacked clean linens",
-      title: "Fresh Clean Linens",
-      category: "Products"
+      alt: "Industrial washing machines used for bulk laundry processing",
+      title: "Industrial Washing Machines",
+      category: "Machinery"
     },
     {
-      src: "/api/placeholder/600/400",
+      src: "/gallery/img_9003.jpg",
       type: "image" as const,
-      alt: "Before and after cleaning",
-      title: "Professional Results",
-      category: "Results"
+      alt: "Large-capacity washers operating for commercial laundry",
+      title: "High-Capacity Washers",
+      category: "Machinery"
     },
     {
-      src: "/api/placeholder/600/400",
+      src: "/gallery/img_9008.jpg",
       type: "image" as const,
-      alt: "Hotel towels",
-      title: "Hotel Quality Standards",
-      category: "Products"
+      alt: "Commercial ironing press machine used for hotel linen",
+      title: "Commercial Ironing Press",
+      category: "Machinery"
     },
     {
-      src: "/api/placeholder/600/400",
+      src: "/gallery/img_9016.jpg",
       type: "image" as const,
-      alt: "Folded uniforms",
-      title: "Staff Uniform Care",
-      category: "Products"
+      alt: "Worker ironing hotel linen and uniforms with precision",
+      title: "Professional Ironing",
+      category: "Process"
     },
     {
-      src: "/api/placeholder/600/400",
+      src: "/gallery/img_9018.jpg",
       type: "image" as const,
-      alt: "Quality control",
+      alt: "Quality assurance check being performed on freshly cleaned linen",
       title: "Quality Assurance",
+      category: "Process"
+    },
+    {
+      src: "/gallery/img_9021.jpg",
+      type: "image" as const,
+      alt: "Folding freshly washed hotel towels and bedsheets",
+      title: "Linen Folding",
+      category: "Process"
+    },
+    {
+      src: "/gallery/img_9028.jpg",
+      type: "image" as const,
+      alt: "Washing process for hotel bedsheets and towels",
+      title: "Linen Washing",
+      category: "Process"
+    },
+    {
+      src: "/gallery/img_9034.jpg",
+      type: "image" as const,
+      alt: "Industrial drying machine used for hotel bedsheets",
+      title: "Commercial Dryer",
+      category: "Machinery"
+    },
+    {
+      src: "/gallery/img_9041.png",
+      type: "image" as const,
+      alt: "Inside view of the laundry facility with machinery and workflow layout",
+      title: "Facility Interior View",
+      category: "Facility"
+    },
+    {
+      src: "/gallery/img_9042.png",
+      type: "image" as const,
+      alt: "Laundry facility area showing equipment arrangement and sorting stations",
+      title: "Facility Workspace Area",
+      category: "Facility"
+    },
+    {
+      src: "/gallery/img_9045.png",
+      type: "image" as const,
+      alt: "Clean and organized section of the laundry operations floor",
+      title: "Operations Floor",
+      category: "Facility"
+    },
+    {
+      src: "/gallery/img_9047.png",
+      type: "image" as const,
+      alt: "Sorting and preparation zone inside Elegant Laundry Solutions facility",
+      title: "Sorting Area",
+      category: "Facility"
+    },
+    {
+      src: "/gallery/img_9052.jpg",
+      type: "image" as const,
+      alt: "Worker neatly folding cleaned clothes and linen",
+      title: "Clothes Folding",
       category: "Process"
     }
   ];
 
   const videoItems = [
     {
-      src: "/api/placeholder/600/400",
+      src: "/gallery/mvi_9025.MP4",
       type: "video" as const,
-      alt: "Delivery process",
-      title: "Delivery Process",
+      poster: "/gallery/img_9052.jpg",
+      alt: "Folded linen being packed for delivery",
+      title: "Linen Packing for Delivery",
       category: "Service"
     },
     {
-      src: "/api/placeholder/600/400",
+      src: "/gallery/mvi_9026.MP4",
       type: "video" as const,
-      alt: "Commercial washing process",
-      title: "Industrial Equipment in Action",
+      poster: "/gallery/img_9052.jpg",
+      alt: "Linen being folded using industrial laundry equipment",
+      title: "Linen Folding",
       category: "Process"
     },
     {
-      src: "/api/placeholder/600/400",
+      src: "/gallery/mvi_9027.MP4",
       type: "video" as const,
-      alt: "Laundry sorting",
-      title: "Professional Sorting",
+      poster: "/gallery/img_9052.jpg",
+      alt: "Fresh laundry being unloaded from industrial washing machine",
+      title: "Laundry Unloading",
       category: "Process"
     },
     {
-      src: "/api/placeholder/600/400",
+      src: "/gallery/mvi_9032.MP4",
       type: "video" as const,
-      alt: "Quality inspection",
-      title: "Quality Control",
-      category: "Quality"
+      poster: "/gallery/img_9052.jpg",
+      alt: "Bedsheets rolling through ironing machine",
+      title: "Bedsheet Rolling",
+      category: "Machinery"
+    },
+    {
+      src: "/gallery/mvi_9036.MP4",
+      type: "video" as const,
+      poster: "/gallery/img_9052.jpg",
+      alt: "Bedsheets unrolling after pressing",
+      title: "Bedsheet Unrolling",
+      category: "Process"
     }
   ];
+
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const video = entry.target as HTMLVideoElement;
+
+          if (entry.isIntersecting) {
+            video.play().catch(() => {});
+          } else {
+            video.pause();
+            video.currentTime = 0;
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+
+    videoRefs.current.forEach((video) => {
+      if (video) observer.observe(video);
+    });
+
+    return () => {
+      videoRefs.current.forEach((video) => {
+        if (video) observer.unobserve(video);
+      });
+    };
+  }, []);
 
   return (
     <section id="gallery" className="mobile-spacing bg-gradient-to-br from-slate-50 to-blue-50/50 dark:from-slate-900 dark:to-slate-800">
@@ -253,17 +351,25 @@ const Gallery = () => {
                       onClick={() => setSelectedItem({src: item.src, type: item.type, title: item.title})}
                     >
                       <div className="aspect-[4/3] relative overflow-hidden">
-                        <img
+                        <video
+                          ref={(el) => {
+                            videoRefs.current[index] = el;
+                          }}
                           src={item.src}
-                          alt={item.alt}
+                          muted
+                          playsInline
+                          loop
                           className="w-full h-full object-cover transition-transform duration-300 group-active:scale-105"
                         />
+
                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+
                         <div className="absolute inset-0 flex items-center justify-center">
                           <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
                             <Play className="w-5 h-5 text-white" fill="white" />
                           </div>
                         </div>
+
                         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
                           <span className="inline-block px-2 py-1 text-xs font-medium bg-white/20 backdrop-blur-sm rounded-full mb-1">
                             {item.category}
