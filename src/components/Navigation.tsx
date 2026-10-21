@@ -11,7 +11,7 @@ export const Logo = ({ light = false }: { light?: boolean }) => (
     </span>
     <span className={`leading-none ${light ? "text-linen" : "text-ink"}`}>
       <span className="block font-serif text-[1.05rem] tracking-tight md:text-lg">Elegant Laundry</span>
-      <span className="mt-1 block text-[0.6rem] uppercase tracking-[0.28em] opacity-70">Solutions</span>
+      <span className="mt-1 block text-[0.6875rem] uppercase tracking-[0.26em] opacity-70">Solutions</span>
     </span>
   </span>
 );

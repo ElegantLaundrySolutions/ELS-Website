@@ -5,6 +5,10 @@ import { scrollToId } from "@/lib/scroll";
 import { Counter } from "@/components/motion";
 import { ease } from "@/lib/constants";
 
+// 16px-wide blurred preview, shown until the hero photo arrives.
+const HERO_LQIP =
+  "data:image/webp;base64,UklGRoAAAABXRUJQVlA4IHQAAADwAwCdASoQABQAPu1iqU2ppaOiMAgBMB2JZQCdACPX4bOz+gS3GJjAAPwAxDeZ7pJujWZjhEh6Mi+8+5apZFUt1e09pxE9IdJekbyWtyPpZSls1hnCZ+AW3bdunpAJ/c4CyICduk1YgLDQ8xkGmtkvo/sQAA==";
+
 const stats = [
   { value: "10+", label: "Years Experience" },
   { value: "500+", label: "Happy Clients" },
@@ -63,7 +67,7 @@ const Hero = () => {
     <section
       id="hero"
       ref={ref}
-      className="relative isolate overflow-hidden bg-ink pb-10 pt-28 text-linen sm:pt-32 lg:min-h-[100svh] lg:pb-14 lg:pt-36"
+      className="relative isolate flex flex-col overflow-hidden bg-ink pb-10 pt-28 text-linen sm:pt-32 lg:min-h-[100svh] lg:pb-10 lg:pt-24"
     >
       {/* ambient light */}
       <div
@@ -81,7 +85,7 @@ const Hero = () => {
         style={{ backgroundImage: "repeating-linear-gradient(90deg, #fff 0 1px, transparent 1px 96px)" }}
       />
 
-      <div className="container-x grid items-center gap-12 lg:grid-cols-12 lg:gap-8">
+      <div className="container-x grid flex-1 items-center gap-12 lg:grid-cols-12 lg:gap-8">
         <motion.div style={{ y: textY }} className="lg:col-span-7">
           <motion.p
             className="eyebrow"
@@ -127,22 +131,26 @@ const Hero = () => {
         </motion.div>
 
         <motion.div
-          className="relative mx-auto w-full max-w-md lg:col-span-5 lg:max-w-none"
-          initial={{ opacity: 0, scale: 0.94 }}
-          animate={{ opacity: 1, scale: 1 }}
+          className="relative mx-auto w-full max-w-[17rem] xs:max-w-xs sm:max-w-sm lg:col-span-5 lg:max-w-[min(28rem,50svh)]"
+          initial={{ scale: 0.94 }}
+          animate={{ scale: 1 }}
           transition={{ duration: 1.4, ease, delay: 0.3 }}
         >
-          <div className="relative aspect-[4/5] overflow-hidden rounded-t-[999px] rounded-b-[2rem] ring-1 ring-white/15 sm:aspect-[5/6] lg:aspect-[4/5]">
-            <motion.video
+          <div
+            className="relative aspect-[4/5] overflow-hidden rounded-t-[999px] rounded-b-[2rem] bg-cover bg-center ring-1 ring-white/15"
+            style={{ backgroundImage: `url(${HERO_LQIP})` }}
+          >
+            <motion.img
               style={{ y: mediaY }}
+              src="/media/hero.webp"
+              srcSet="/media/hero-sm.webp 480w, /media/hero.webp 864w"
+              sizes="(min-width: 1024px) 40vw, (min-width: 640px) 24rem, 80vw"
+              alt="Freshly pressed white linens stacked in a commercial laundry"
+              width={864}
+              height={1080}
+              fetchPriority="high"
+              decoding="async"
               className="absolute inset-0 h-[118%] w-full -translate-y-[9%] object-cover"
-              src="/media/hero-loop.mp4"
-              poster="/media/hero-loop-poster.webp"
-              autoPlay
-              muted
-              loop
-              playsInline
-              aria-label="Bedsheets rolling through the industrial ironer at our facility"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent" />
           </div>
@@ -166,7 +174,7 @@ const Hero = () => {
       </div>
 
       {/* trust bar */}
-      <div className="container-x mt-14 lg:mt-20">
+      <div className="container-x mt-14 lg:mt-10">
         <motion.dl
           className="grid grid-cols-3 divide-x divide-white/10 rounded-3xl bg-white/[0.04] ring-1 ring-white/10 backdrop-blur-sm"
           initial={{ opacity: 0, y: 24 }}
@@ -174,12 +182,12 @@ const Hero = () => {
           transition={{ duration: 1, ease, delay: 1.1 }}
         >
           {stats.map((s) => (
-            <div key={s.label} className="px-3 py-5 text-center sm:px-6 sm:py-7">
+            <div key={s.label} className="px-2 py-5 text-center sm:px-6 sm:py-6">
               <dt className="sr-only">{s.label}</dt>
               <dd className="font-serif text-3xl font-light text-brass-light sm:text-5xl">
                 <Counter value={s.value} />
               </dd>
-              <dd className="mt-1 text-[0.7rem] uppercase tracking-[0.14em] text-linen/60 sm:mt-2 sm:text-xs">
+              <dd className="mt-1 text-[0.6875rem] uppercase leading-tight tracking-[0.1em] text-linen/60 xs:text-xs sm:mt-2 sm:tracking-[0.14em]">
                 {s.label}
               </dd>
             </div>

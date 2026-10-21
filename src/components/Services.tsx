@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform, type MotionValue } from "motion/react";
 import { Bed, TShirt, Drop, Wind, Check } from "@phosphor-icons/react";
 import { Reveal } from "@/components/motion";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 const services = [
   {
@@ -53,12 +53,12 @@ const Card = ({
   progress: MotionValue<number>;
 }) => {
   // Each card shrinks slightly as the ones after it slide over.
-  const mobile = useIsMobile();
-  const scale = useTransform(progress, [i / services.length, 1], [1, mobile ? 1 : 1 - (services.length - 1 - i) * 0.04]);
+  const stacked = useMediaQuery("(min-width: 768px) and (min-height: 640px)");
+  const scale = useTransform(progress, [i / services.length, 1], [1, stacked ? 1 - (services.length - 1 - i) * 0.04 : 1]);
   const Icon = service.icon;
 
   return (
-    <div className="md:sticky" style={{ top: `calc(var(--nav-h) + 2rem + ${i * 1.75}rem)` }}>
+    <div className="stack:sticky" style={{ top: `calc(var(--nav-h) + 2rem + ${i * 1.75}rem)` }}>
       <motion.article
         style={{ scale }}
         className="grid origin-top overflow-hidden rounded-[2rem] bg-paper ring-1 ring-ink/10 shadow-[0_30px_60px_-30px_hsl(var(--ink)/0.35)] md:min-h-[460px] md:grid-cols-2"
@@ -66,10 +66,11 @@ const Card = ({
         <div className="relative aspect-[16/10] overflow-hidden md:order-2 md:aspect-auto">
           <img
             src={`${service.image}.webp`}
-            srcSet={`${service.image}-sm.webp 640w, ${service.image}.webp 1600w`}
+            srcSet={`${service.image}-sm.webp 640w, ${service.image}-md.webp 1024w, ${service.image}.webp 1600w`}
             sizes="(min-width: 768px) 50vw, 100vw"
             alt={service.alt}
             loading="lazy"
+              decoding="async"
             className="absolute inset-0 h-full w-full object-cover saturate-[0.85]"
           />
           <span className="absolute left-5 top-5 rounded-full bg-linen/90 px-3 py-1 font-serif text-sm text-ink backdrop-blur">

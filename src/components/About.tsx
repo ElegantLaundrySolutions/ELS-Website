@@ -37,10 +37,11 @@ const About = () => {
             <motion.img
               style={{ y: imgY }}
               src="/media/img_9045.webp"
-              srcSet="/media/img_9045-sm.webp 640w, /media/img_9045.webp 1600w"
+              srcSet="/media/img_9045-sm.webp 640w, /media/img_9045-md.webp 1024w, /media/img_9045.webp 1600w"
               sizes="(min-width: 1024px) 50vw, 100vw"
               alt="Our laundry operations floor with ironing stations and washers"
               loading="lazy"
+              decoding="async"
               className="absolute inset-0 h-[116%] w-full -translate-y-[8%] object-cover saturate-[0.85]"
             />
           </div>
@@ -57,7 +58,7 @@ const About = () => {
               <div className="font-serif text-3xl font-light text-harbor">
                 <Counter value="99%" />
               </div>
-              <div className="mt-1 text-[0.7rem] uppercase tracking-[0.16em] text-muted-foreground">
+              <div className="mt-1 text-xs uppercase tracking-[0.14em] text-muted-foreground">
                 Client Satisfaction
               </div>
             </div>

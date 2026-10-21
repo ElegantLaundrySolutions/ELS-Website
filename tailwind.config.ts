@@ -12,6 +12,8 @@ export default {
 			lg: '1024px',
 			xl: '1280px',
 			'2xl': '1536px',
+			// wide and tall enough for the sticky service-card stack
+			stack: { raw: '(min-width: 768px) and (min-height: 640px)' },
 		},
 		extend: {
 			fontFamily: {

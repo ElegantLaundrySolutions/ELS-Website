@@ -58,7 +58,7 @@ const Field = ({
       {children}
       <label
         htmlFor={name}
-        className={`field-label ${select ? "!top-2 !text-[0.7rem]" : ""}`}
+        className={`field-label ${select ? "!top-2 !text-xs" : ""}`}
       >
         {label}
       </label>

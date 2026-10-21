@@ -38,11 +38,16 @@ const items: Item[] = [
 const filters = ["All", "Facility", "Machinery", "Process", "Videos"];
 
 const thumb = (it: Item) => (it.type === "video" ? `/media/${it.name}-poster.webp` : `/media/${it.name}-sm.webp`);
+const thumbSet = (it: Item) =>
+  it.type === "video" ? undefined : `/media/${it.name}-sm.webp 640w, /media/${it.name}-md.webp 1024w`;
+const full = (it: Item) => (it.type === "video" ? `/media/${it.name}-poster.webp` : `/media/${it.name}.webp`);
 
 // Rhythm of tile sizes so the grid reads as an editorial collage.
 const spans = ["md:col-span-2 md:row-span-2", "", "", "row-span-2", "", "col-span-2", "", ""];
 
-const Tile = ({ item, i, onOpen }: { item: Item; i: number; onOpen: () => void }) => (
+const Tile = ({ item, i, onOpen }: { item: Item; i: number; onOpen: () => void }) => {
+  const big = spans[i % spans.length].includes("col-span-2");
+  return (
   <motion.button
     layout
     initial={{ opacity: 0, scale: 0.96 }}
@@ -57,8 +62,11 @@ const Tile = ({ item, i, onOpen }: { item: Item; i: number; onOpen: () => void }
   >
     <img
       src={thumb(item)}
+      srcSet={thumbSet(item)}
+      sizes={big ? "(min-width: 768px) 50vw, 100vw" : "(min-width: 768px) 25vw, 50vw"}
       alt={item.alt}
       loading="lazy"
+      decoding="async"
       className="absolute inset-0 h-full w-full object-cover saturate-[0.85] transition-transform duration-[1.2s] ease-out group-hover:scale-105"
     />
     {item.type === "video" && (
@@ -82,11 +90,12 @@ const Tile = ({ item, i, onOpen }: { item: Item; i: number; onOpen: () => void }
       </span>
     )}
     <span className="absolute inset-x-0 bottom-0 p-3 text-linen transition-transform duration-500 sm:p-4 md:translate-y-2 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100">
-      <span className="block text-[0.65rem] uppercase tracking-[0.18em] text-brass-light">{item.category}</span>
+      <span className="block text-[0.6875rem] uppercase tracking-[0.16em] sm:text-xs text-brass-light">{item.category}</span>
       <span className="mt-1 block font-serif text-sm leading-tight sm:text-lg">{item.title}</span>
     </span>
   </motion.button>
-);
+  );
+};
 
 const Lightbox = ({
   list,
@@ -99,6 +108,13 @@ const Lightbox = ({
 }) => {
   const item = list[index];
   const go = useCallback((d: number) => setIndex((index + d + list.length) % list.length), [index, list.length, setIndex]);
+
+  // Warm the neighbours so next/prev appear instantly.
+  useEffect(() => {
+    [list[(index + 1) % list.length], list[(index - 1 + list.length) % list.length]].forEach((it) => {
+      new Image().src = full(it);
+    });
+  }, [index, list]);
 
   useEffect(() => {
     lockScroll(true);
@@ -196,7 +212,7 @@ const Lightbox = ({
       </div>
 
       <div className="p-4 pb-[max(1rem,env(safe-area-inset-bottom))] text-center sm:p-6" onClick={(e) => e.stopPropagation()}>
-        <p className="text-[0.65rem] uppercase tracking-[0.2em] text-brass-light">{item.category}</p>
+        <p className="text-xs uppercase tracking-[0.2em] text-brass-light">{item.category}</p>
         <p className="mt-1 font-serif text-xl">{item.title}</p>
         <p className="mt-2 text-xs text-linen/40 sm:hidden">Swipe to browse</p>
       </div>

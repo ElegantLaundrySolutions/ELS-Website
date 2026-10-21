@@ -44,9 +44,9 @@ export const WhatsAppFab = () => {
 
 const Footer = () => (
   <footer className="relative overflow-hidden bg-ink text-linen">
-    <div className="container-x border-t border-white/10 pt-16 sm:pt-20">
-      <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-12">
-        <div className="lg:col-span-5">
+    <div className="container-x border-t border-white/10 pt-14 sm:pt-20">
+      <div className="grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 lg:grid-cols-12">
+        <div className="col-span-2 sm:col-span-3 lg:col-span-5">
           <Logo light />
           <p className="mt-6 max-w-sm leading-relaxed text-linen/60">
             Your trusted partner for professional commercial laundry services. Serving the hospitality industry with
@@ -99,7 +99,7 @@ const Footer = () => (
           </ul>
         </div>
 
-        <div className="lg:col-span-3">
+        <div className="col-span-2 sm:col-span-1 lg:col-span-3">
           <h4 className="font-sans text-xs uppercase tracking-[0.18em] text-brass-light">Contact Info</h4>
           <ul className="mt-5 space-y-3 text-linen/70">
             <li>
@@ -118,7 +118,7 @@ const Footer = () => (
         </div>
       </div>
 
-      <div className="mt-16 flex flex-col-reverse items-start justify-between gap-4 border-t border-white/10 py-6 text-sm text-linen/50 sm:flex-row sm:items-center">
+      <div className="mt-12 flex flex-col-reverse sm:mt-16 items-start justify-between gap-4 border-t border-white/10 py-6 text-sm text-linen/50 sm:flex-row sm:items-center">
         <p>&copy; {new Date().getFullYear()} Elegant Laundry Solutions. All rights reserved.</p>
         <button
           onClick={() => scrollToId("hero")}
