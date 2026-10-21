@@ -62,8 +62,8 @@ export const WhatsAppFab = () => {
   );
 };
 
-const heading = "font-sans text-xs font-medium uppercase tracking-[0.18em] text-harbor";
-const link = "transition-colors hover:text-brass";
+const heading = "font-sans text-xs font-medium uppercase tracking-[0.18em] text-brass-light";
+const link = "transition-colors hover:text-linen";
 
 const contactRows = [
   { Icon: Phone, text: "+91-9158660092", href: "tel:+919158660092" },
@@ -75,15 +75,18 @@ const contactRows = [
 // Mobile: brand, contact card, then links and services as centred wrap rows.
 // Tablet/desktop: brand, links, services, contact as columns.
 const Footer = () => (
-  <footer className="relative overflow-hidden bg-linen text-ink">
-    <div className="container-x pt-16 sm:pt-20">
+  <footer className="relative overflow-hidden bg-ink text-linen">
+    <div className="container-x border-t border-white/10 pt-16 sm:pt-20">
       <div className="grid gap-y-10 sm:grid-cols-3 sm:gap-x-6 sm:gap-y-12 lg:grid-cols-12 lg:items-start">
-        <div className="flex flex-col items-center text-center sm:col-span-3 lg:col-span-4 lg:items-start lg:text-left">
-          <Logo className="w-56 sm:w-72 lg:w-80" sizes="(min-width: 1024px) 320px, 288px" />
-          <p className="mt-6 max-w-sm leading-relaxed text-muted-foreground">
+        <div className="flex flex-col items-center sm:col-span-3 lg:col-span-4 lg:items-start">
+          {/* the logo is navy, so it sits on its own white card */}
+          <div className="flex w-full max-w-sm flex-col items-center rounded-3xl bg-white p-6 text-center shadow-xl sm:p-8">
+            <Logo className="w-52 sm:w-64" sizes="256px" />
+            <p className="mt-5 text-[0.9375rem] leading-relaxed text-muted-foreground">
             Your trusted partner for professional commercial laundry services. Serving the hospitality industry with
-            excellence for over 10 years.
-          </p>
+              excellence for over 10 years.
+            </p>
+          </div>
           {socials.length > 0 && (
             <div className="mt-6 flex gap-2">
               {socials.map(({ label, href, Icon }) => (
@@ -93,7 +96,7 @@ const Footer = () => (
                   target="_blank"
                   rel="noreferrer"
                   aria-label={label}
-                  className="grid h-11 w-11 place-items-center rounded-full ring-1 ring-ink/15 transition-colors hover:bg-ink hover:text-linen hover:ring-ink"
+                  className="grid h-11 w-11 place-items-center rounded-full ring-1 ring-white/15 transition-colors hover:bg-brass hover:text-ink hover:ring-brass"
                 >
                   <Icon size={20} />
                 </a>
@@ -104,18 +107,18 @@ const Footer = () => (
 
         <div className="sm:order-last sm:col-span-1 lg:col-span-4 lg:pt-6">
           <h4 className={`${heading} text-center sm:text-left`}>Contact Info</h4>
-          <ul className="mt-5 divide-y divide-ink/10 overflow-hidden rounded-2xl bg-paper ring-1 ring-ink/10 sm:divide-y-0 sm:rounded-none sm:bg-transparent sm:ring-0">
+          <ul className="mt-5 divide-y divide-white/10 overflow-hidden rounded-2xl bg-white/[0.04] ring-1 ring-white/10 sm:divide-y-0 sm:rounded-none sm:bg-transparent sm:ring-0">
             {contactRows.map(({ Icon, text, href }) => {
               const body = (
                 <>
-                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-mist text-harbor sm:h-8 sm:w-8">
+                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/10 text-brass-light sm:h-8 sm:w-8">
                     <Icon size={18} weight="duotone" />
                   </span>
                   {/* zero-width space lets a long email wrap before the @ instead of mid-word */}
                   <span className="min-w-0 [overflow-wrap:anywhere]">{text.replace("@", "\u200B@")}</span>
                 </>
               );
-              const row = "flex items-center gap-3 px-4 py-3 text-ink/80 sm:px-0 sm:py-1.5";
+              const row = "flex items-center gap-3 px-4 py-3 text-linen/80 sm:px-0 sm:py-1.5";
               return (
                 <li key={text}>
                   {href ? (
@@ -133,7 +136,7 @@ const Footer = () => (
 
         <nav aria-label="Footer" className="text-center sm:text-left lg:col-span-2 lg:pt-6">
           <h4 className={heading}>Quick Links</h4>
-          <ul className="mt-4 flex flex-wrap justify-center gap-x-5 gap-y-2 text-ink/70 sm:mt-5 sm:block sm:space-y-3">
+          <ul className="mt-4 flex flex-wrap justify-center gap-x-5 gap-y-2 text-linen/70 sm:mt-5 sm:block sm:space-y-3">
             {navItems.map((n) => (
               <li key={n.id}>
                 <a
@@ -153,13 +156,13 @@ const Footer = () => (
 
         <div className="text-center sm:text-left lg:col-span-2 lg:pt-6">
           <h4 className={heading}>Our Services</h4>
-          <ul className="mt-4 flex flex-wrap justify-center gap-2 text-ink/70 sm:mt-5 sm:block sm:space-y-3">
+          <ul className="mt-4 flex flex-wrap justify-center gap-2 text-linen/70 sm:mt-5 sm:block sm:space-y-3">
             {services.map((s) => (
               <li
                 key={s}
-                className="flex items-center gap-1.5 rounded-full bg-paper px-3 py-1.5 text-sm ring-1 ring-ink/10 sm:rounded-none sm:bg-transparent sm:p-0 sm:text-base sm:ring-0"
+                className="flex items-center gap-1.5 rounded-full bg-white/[0.04] px-3 py-1.5 text-sm ring-1 ring-white/10 sm:rounded-none sm:bg-transparent sm:p-0 sm:text-base sm:ring-0"
               >
-                <Check size={12} weight="bold" className="text-brass sm:hidden" />
+                <Check size={12} weight="bold" className="text-brass-light sm:hidden" />
                 {s}
               </li>
             ))}
@@ -167,11 +170,11 @@ const Footer = () => (
         </div>
       </div>
 
-      <div className="mt-12 flex flex-col items-center justify-between gap-2 border-t border-ink/10 py-6 text-center text-sm text-muted-foreground sm:mt-16 sm:flex-row sm:text-left">
+      <div className="mt-12 flex flex-col items-center justify-between gap-2 border-t border-white/10 py-6 text-center text-sm text-linen/50 sm:mt-16 sm:flex-row sm:text-left">
         <p>&copy; {new Date().getFullYear()} Elegant Laundry Solutions. All rights reserved.</p>
         <button
           onClick={() => scrollToId("hero")}
-          className="group flex min-h-[44px] items-center gap-2 transition-colors hover:text-ink"
+          className="group flex min-h-[44px] items-center gap-2 transition-colors hover:text-linen"
         >
           Back to top <ArrowUp className="transition-transform group-hover:-translate-y-0.5" />
         </button>
