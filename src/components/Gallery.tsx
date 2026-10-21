@@ -1,484 +1,268 @@
-import { useEffect, useRef, useState } from "react";
-import { X, Play } from "lucide-react";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
+import { useCallback, useEffect, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { CaretLeft, CaretRight, X, Play, ArrowsOut } from "@phosphor-icons/react";
+import { Reveal } from "@/components/motion";
+import { ease } from "@/lib/constants";
+import { lockScroll } from "@/lib/scroll";
 
-const Gallery = () => {
-  const [selectedItem, setSelectedItem] = useState<{src: string, type: 'image' | 'video', title: string} | null>(null);
+type Item = {
+  name: string;
+  type: "image" | "video";
+  alt: string;
+  title: string;
+  category: string;
+};
 
-  const photoItems = [
-    {
-      src: "/gallery/building.png",
-      type: "image" as const,
-      alt: "Front view of Elegant Laundry Solutions facility in Goa",
-      title: "Laundry Facility Exterior",
-      category: "Facility"
-    },
-    {
-      src: "/gallery/img_8993.png",
-      type: "image" as const,
-      alt: "Industrial washing machines used for bulk laundry processing",
-      title: "Industrial Washing Machines",
-      category: "Machinery"
-    },
-    {
-      src: "/gallery/img_9003.jpg",
-      type: "image" as const,
-      alt: "Large-capacity washers operating for commercial laundry",
-      title: "High-Capacity Washers",
-      category: "Machinery"
-    },
-    {
-      src: "/gallery/img_9008.jpg",
-      type: "image" as const,
-      alt: "Commercial ironing press machine used for hotel linen",
-      title: "Commercial Ironing Press",
-      category: "Machinery"
-    },
-    {
-      src: "/gallery/img_9016.jpg",
-      type: "image" as const,
-      alt: "Worker ironing hotel linen and uniforms with precision",
-      title: "Professional Ironing",
-      category: "Process"
-    },
-    {
-      src: "/gallery/img_9018.jpg",
-      type: "image" as const,
-      alt: "Quality assurance check being performed on freshly cleaned linen",
-      title: "Quality Assurance",
-      category: "Process"
-    },
-    {
-      src: "/gallery/img_9021.jpg",
-      type: "image" as const,
-      alt: "Folding freshly washed hotel towels and bedsheets",
-      title: "Linen Folding",
-      category: "Process"
-    },
-    {
-      src: "/gallery/img_9028.jpg",
-      type: "image" as const,
-      alt: "Washing process for hotel bedsheets and towels",
-      title: "Linen Washing",
-      category: "Process"
-    },
-    {
-      src: "/gallery/img_9034.jpg",
-      type: "image" as const,
-      alt: "Industrial drying machine used for hotel bedsheets",
-      title: "Commercial Dryer",
-      category: "Machinery"
-    },
-    {
-      src: "/gallery/img_9041.png",
-      type: "image" as const,
-      alt: "Inside view of the laundry facility with machinery and workflow layout",
-      title: "Facility Interior View",
-      category: "Facility"
-    },
-    {
-      src: "/gallery/img_9042.png",
-      type: "image" as const,
-      alt: "Laundry facility area showing equipment arrangement and sorting stations",
-      title: "Facility Workspace Area",
-      category: "Facility"
-    },
-    {
-      src: "/gallery/img_9045.png",
-      type: "image" as const,
-      alt: "Clean and organized section of the laundry operations floor",
-      title: "Operations Floor",
-      category: "Facility"
-    },
-    {
-      src: "/gallery/img_9047.png",
-      type: "image" as const,
-      alt: "Sorting and preparation zone inside Elegant Laundry Solutions facility",
-      title: "Sorting Area",
-      category: "Facility"
-    },
-    {
-      src: "/gallery/img_9052.jpg",
-      type: "image" as const,
-      alt: "Worker neatly folding cleaned clothes and linen",
-      title: "Clothes Folding",
-      category: "Process"
-    }
-  ];
+const items: Item[] = [
+  { name: "building", type: "image", alt: "Front view of Elegant Laundry Solutions facility in Goa", title: "Laundry Facility Exterior", category: "Facility" },
+  { name: "mvi_9032", type: "video", alt: "Bedsheets rolling through ironing machine", title: "Bedsheet Rolling", category: "Machinery" },
+  { name: "img_8993", type: "image", alt: "Industrial washing machines used for bulk laundry processing", title: "Industrial Washing Machines", category: "Machinery" },
+  { name: "img_9003", type: "image", alt: "Large-capacity washers operating for commercial laundry", title: "High-Capacity Washers", category: "Machinery" },
+  { name: "img_9016", type: "image", alt: "Worker ironing hotel linen and uniforms with precision", title: "Professional Ironing", category: "Process" },
+  { name: "mvi_9025", type: "video", alt: "Folded linen being packed for delivery", title: "Linen Packing for Delivery", category: "Service" },
+  { name: "img_9008", type: "image", alt: "Commercial ironing press machine used for hotel linen", title: "Commercial Ironing Press", category: "Machinery" },
+  { name: "img_9018", type: "image", alt: "Quality assurance check being performed on freshly cleaned linen", title: "Quality Assurance", category: "Process" },
+  { name: "img_9041", type: "image", alt: "Inside view of the laundry facility with machinery and workflow layout", title: "Facility Interior View", category: "Facility" },
+  { name: "mvi_9027", type: "video", alt: "Fresh laundry being unloaded from industrial washing machine", title: "Laundry Unloading", category: "Process" },
+  { name: "img_9021", type: "image", alt: "Folding freshly washed hotel towels and bedsheets", title: "Linen Folding", category: "Process" },
+  { name: "img_9028", type: "image", alt: "Washing process for hotel bedsheets and towels", title: "Linen Washing", category: "Process" },
+  { name: "img_9034", type: "image", alt: "Industrial drying machine used for hotel bedsheets", title: "Commercial Dryer", category: "Machinery" },
+  { name: "mvi_9026", type: "video", alt: "Linen being folded using industrial laundry equipment", title: "Linen Folding", category: "Process" },
+  { name: "img_9042", type: "image", alt: "Laundry facility area showing equipment arrangement and sorting stations", title: "Facility Workspace Area", category: "Facility" },
+  { name: "img_9045", type: "image", alt: "Clean and organized section of the laundry operations floor", title: "Operations Floor", category: "Facility" },
+  { name: "img_9047", type: "image", alt: "Sorting and preparation zone inside Elegant Laundry Solutions facility", title: "Sorting Area", category: "Facility" },
+  { name: "mvi_9036", type: "video", alt: "Bedsheets unrolling after pressing", title: "Bedsheet Unrolling", category: "Process" },
+  { name: "img_9052", type: "image", alt: "Worker neatly folding cleaned clothes and linen", title: "Clothes Folding", category: "Process" },
+];
 
-  const videoItems = [
-    {
-      src: "/gallery/mvi_9025.MP4",
-      type: "video" as const,
-      poster: "/gallery/img_9052.jpg",
-      alt: "Folded linen being packed for delivery",
-      title: "Linen Packing for Delivery",
-      category: "Service"
-    },
-    {
-      src: "/gallery/mvi_9026.MP4",
-      type: "video" as const,
-      poster: "/gallery/img_9052.jpg",
-      alt: "Linen being folded using industrial laundry equipment",
-      title: "Linen Folding",
-      category: "Process"
-    },
-    {
-      src: "/gallery/mvi_9027.MP4",
-      type: "video" as const,
-      poster: "/gallery/img_9052.jpg",
-      alt: "Fresh laundry being unloaded from industrial washing machine",
-      title: "Laundry Unloading",
-      category: "Process"
-    },
-    {
-      src: "/gallery/mvi_9032.MP4",
-      type: "video" as const,
-      poster: "/gallery/img_9052.jpg",
-      alt: "Bedsheets rolling through ironing machine",
-      title: "Bedsheet Rolling",
-      category: "Machinery"
-    },
-    {
-      src: "/gallery/mvi_9036.MP4",
-      type: "video" as const,
-      poster: "/gallery/img_9052.jpg",
-      alt: "Bedsheets unrolling after pressing",
-      title: "Bedsheet Unrolling",
-      category: "Process"
-    }
-  ];
+const filters = ["All", "Facility", "Machinery", "Process", "Videos"];
 
-  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+const thumb = (it: Item) => (it.type === "video" ? `/media/${it.name}-poster.webp` : `/media/${it.name}-sm.webp`);
+
+// Rhythm of tile sizes so the grid reads as an editorial collage.
+const spans = ["md:col-span-2 md:row-span-2", "", "", "row-span-2", "", "col-span-2", "", ""];
+
+const Tile = ({ item, i, onOpen }: { item: Item; i: number; onOpen: () => void }) => (
+  <motion.button
+    layout
+    initial={{ opacity: 0, scale: 0.96 }}
+    animate={{ opacity: 1, scale: 1 }}
+    exit={{ opacity: 0, scale: 0.96 }}
+    transition={{ duration: 0.5, ease }}
+    onClick={onOpen}
+    aria-label={`Open ${item.title}`}
+    className={`group relative overflow-hidden rounded-2xl bg-ink/5 text-left ${spans[i % spans.length]}`}
+    onPointerEnter={(e) => e.pointerType === "mouse" && e.currentTarget.querySelector("video")?.play().catch(() => {})}
+    onPointerLeave={(e) => e.currentTarget.querySelector("video")?.pause()}
+  >
+    <img
+      src={thumb(item)}
+      alt={item.alt}
+      loading="lazy"
+      className="absolute inset-0 h-full w-full object-cover saturate-[0.85] transition-transform duration-[1.2s] ease-out group-hover:scale-105"
+    />
+    {item.type === "video" && (
+      <video
+        src={`/media/${item.name}.mp4`}
+        muted
+        loop
+        playsInline
+        preload="none"
+        className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+      />
+    )}
+    <span className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/0 to-transparent opacity-90 transition-opacity duration-500 md:opacity-0 md:group-hover:opacity-100" />
+    {item.type === "video" ? (
+      <span className="absolute right-3 top-3 grid h-10 w-10 place-items-center rounded-full bg-linen/90 text-ink backdrop-blur transition-transform duration-500 group-hover:scale-110">
+        <Play size={16} weight="fill" />
+      </span>
+    ) : (
+      <span className="absolute right-3 top-3 hidden h-10 w-10 place-items-center rounded-full bg-linen/90 text-ink opacity-0 backdrop-blur transition-opacity duration-500 group-hover:opacity-100 md:grid">
+        <ArrowsOut size={16} />
+      </span>
+    )}
+    <span className="absolute inset-x-0 bottom-0 p-3 text-linen transition-transform duration-500 sm:p-4 md:translate-y-2 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100">
+      <span className="block text-[0.65rem] uppercase tracking-[0.18em] text-brass-light">{item.category}</span>
+      <span className="mt-1 block font-serif text-sm leading-tight sm:text-lg">{item.title}</span>
+    </span>
+  </motion.button>
+);
+
+const Lightbox = ({
+  list,
+  index,
+  setIndex,
+}: {
+  list: Item[];
+  index: number;
+  setIndex: (i: number | null) => void;
+}) => {
+  const item = list[index];
+  const go = useCallback((d: number) => setIndex((index + d + list.length) % list.length), [index, list.length, setIndex]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const video = entry.target as HTMLVideoElement;
-
-          if (entry.isIntersecting) {
-            video.play().catch(() => {});
-          } else {
-            video.pause();
-            video.currentTime = 0;
-          }
-        });
-      },
-      { threshold: 0.6 }
-    );
-
-    videoRefs.current.forEach((video) => {
-      if (video) observer.observe(video);
-    });
-
-    return () => {
-      videoRefs.current.forEach((video) => {
-        if (video) observer.unobserve(video);
-      });
+    lockScroll(true);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIndex(null);
+      if (e.key === "ArrowRight") go(1);
+      if (e.key === "ArrowLeft") go(-1);
     };
-  }, []);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      lockScroll(false);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [go, setIndex]);
 
   return (
-    <section id="gallery" className="mobile-spacing bg-gradient-to-br from-slate-50 to-blue-50/50 dark:from-slate-900 dark:to-slate-800">
-      <div className="content-container">
-        <div className="text-center mb-8 md:mb-12 reveal">
-          <h2 className="heading-lg mb-4 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-            Our Gallery
-          </h2>
-          <p className="text-lead max-w-2xl mx-auto text-muted-foreground">
-            Explore our state-of-the-art facility, quality work, and professional processes
-          </p>
-        </div>
-
-        {/* Desktop: Photos Slider (First Row) + Videos Slider (Second Row) */}
-        <div className="hidden md:block space-y-12">
-          {/* Photos Slider */}
-          <div className="scroll-fade-in">
-            <h3 className="text-xl font-semibold mb-6 text-center text-foreground">Our Facility & Work</h3>
-            <Carousel 
-              className="w-full"
-              plugins={[
-                Autoplay({
-                  delay: 4000,
-                }),
-              ]}
-              opts={{
-                align: "start",
-                loop: true,
-              }}
-            >
-              <CarouselContent className="-ml-4">
-                {photoItems.map((item, index) => (
-                  <CarouselItem key={index} className="pl-4 basis-1/2 lg:basis-1/3 xl:basis-1/4">
-                    <div 
-                      className="group relative overflow-hidden rounded-2xl cursor-pointer transform transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl card-glow"
-                      onClick={() => setSelectedItem({src: item.src, type: item.type, title: item.title})}
-                    >
-                      <div className="aspect-[4/3] relative overflow-hidden">
-                        <img
-                          src={item.src}
-                          alt={item.alt}
-                          className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300">
-                          <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                            <span className="inline-block px-3 py-1 text-xs font-medium bg-white/20 backdrop-blur-sm rounded-full mb-2">
-                              {item.category}
-                            </span>
-                            <h3 className="font-semibold text-base leading-tight">{item.title}</h3>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="left-2" />
-              <CarouselNext className="right-2" />
-            </Carousel>
-          </div>
-
-          {/* Videos Slider */}
-          <div className="scroll-slide-left">
-            <h3 className="text-xl font-semibold mb-6 text-center text-foreground">Process Videos</h3>
-            <Carousel 
-              className="w-full"
-              plugins={[
-                Autoplay({
-                  delay: 5000,
-                }),
-              ]}
-              opts={{
-                align: "start",
-                loop: true,
-              }}
-            >
-              <CarouselContent className="-ml-4">
-                {videoItems.map((item, index) => (
-                  <CarouselItem key={index} className="pl-4 basis-1/2 lg:basis-1/3">
-                    <div 
-                      className="group relative overflow-hidden rounded-2xl cursor-pointer transform transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl card-glow"
-                      onClick={() => setSelectedItem({src: item.src, type: item.type, title: item.title})}
-                    >
-                      <div className="aspect-[4/3] relative overflow-hidden">
-                        <img
-                          src={item.src}
-                          alt={item.alt}
-                          className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="bg-white/20 backdrop-blur-sm rounded-full p-4 transform transition-all duration-300 group-hover:scale-110 group-hover:bg-white/30">
-                            <Play className="w-8 h-8 text-white" fill="white" />
-                          </div>
-                        </div>
-                        <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                          <span className="inline-block px-3 py-1 text-xs font-medium bg-white/20 backdrop-blur-sm rounded-full mb-2">
-                            {item.category}
-                          </span>
-                          <h3 className="font-semibold text-base leading-tight">{item.title}</h3>
-                        </div>
-                      </div>
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="left-2" />
-              <CarouselNext className="right-2" />
-            </Carousel>
-          </div>
-        </div>
-
-        {/* Mobile: Photos Grid + Videos Slider */}
-        <div className="md:hidden space-y-8">
-          {/* Photos Grid */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-center text-foreground">Our Work</h3>
-
-            <Carousel 
-              className="w-full"
-              plugins={[
-                Autoplay({
-                  delay: 2000,
-                }),
-              ]}
-              opts={{
-                align: "center",
-                loop: true,
-              }}
-            >
-              <CarouselContent>
-                {/* One slide = 4 images in a grid */}
-                <CarouselItem className="basis-full">
-                  <div className="grid grid-cols-2 gap-3">
-                    {photoItems.slice(0, 4).map((item, index) => (
-                      <div 
-                        key={index}
-                        className="group relative overflow-hidden rounded-xl cursor-pointer transform transition-all duration-300 active:scale-95"
-                        onClick={() => setSelectedItem({src: item.src, type: item.type, title: item.title})}
-                      >
-                        <div className="aspect-square relative overflow-hidden">
-                          <img
-                            src={item.src}
-                            alt={item.alt}
-                            className="w-full h-full object-cover"
-                          />
-                          <div className="absolute inset-0 bg-black/20 group-active:bg-black/40 transition-all duration-200" />
-                          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
-                            <span className="inline-block px-2 py-1 text-xs font-medium bg-white/20 backdrop-blur-sm rounded-full mb-1">
-                              {item.category}
-                            </span>
-                            <h3 className="font-medium text-white text-xs leading-tight">{item.title}</h3>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CarouselItem>
-
-                {/* EXTRA SLIDES (optional): show next 4, next 4… */}
-                {photoItems.length > 4 && (
-                  <CarouselItem className="basis-full">
-                    <div className="grid grid-cols-2 gap-3">
-                      {photoItems.slice(4, 8).map((item, index) => (
-                        <div 
-                          key={index}
-                          className="group relative overflow-hidden rounded-xl cursor-pointer transform transition-all duration-300 active:scale-95"
-                          onClick={() => setSelectedItem({src: item.src, type: item.type, title: item.title})}
-                        >
-                          <div className="aspect-square relative overflow-hidden">
-                            <img
-                              src={item.src}
-                              alt={item.alt}
-                              className="w-full h-full object-cover"
-                            />
-                            <div className="absolute inset-0 bg-black/20 group-active:bg-black/40 transition-all duration-200" />
-                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
-                              <span className="inline-block px-2 py-1 text-xs font-medium bg-white/20 backdrop-blur-sm rounded-full mb-1">
-                                {item.category}
-                              </span>
-                              <h3 className="font-medium text-white text-xs leading-tight">{item.title}</h3>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </CarouselItem>
-                )}
-
-              </CarouselContent>
-{/* 
-              <CarouselPrevious className="left-2" />
-              <CarouselNext className="right-2" /> */}
-            </Carousel>
-          </div>
-
-
-          {/* Videos Slider */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-center text-foreground">Process Videos</h3>
-            <Carousel 
-              className="w-full max-w-sm mx-auto"
-              plugins={[
-                Autoplay({
-                  delay: 4000,
-                }),
-              ]}
-              opts={{
-                align: "center",
-                loop: true,
-              }}
-            >
-              <CarouselContent>
-                {videoItems.map((item, index) => (
-                  <CarouselItem key={index}>
-                    <div 
-                      className="group relative overflow-hidden rounded-xl cursor-pointer"
-                      onClick={() => setSelectedItem({src: item.src, type: item.type, title: item.title})}
-                    >
-                      <div className="aspect-[4/3] relative overflow-hidden">
-                        <video
-                          ref={(el) => {
-                            videoRefs.current[index] = el;
-                          }}
-                          src={item.src}
-                          muted
-                          playsInline
-                          loop
-                          className="w-full h-full object-cover transition-transform duration-300 group-active:scale-105"
-                        />
-
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-
-                        {/* <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
-                            <Play className="w-5 h-5 text-white" fill="white" />
-                          </div>
-                        </div> */}
-
-                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
-                          <span className="inline-block px-2 py-1 text-xs font-medium bg-white/20 backdrop-blur-sm rounded-full mb-1">
-                            {item.category}
-                          </span>
-                          <h3 className="font-semibold text-white text-sm">{item.title}</h3>
-                        </div>
-                      </div>
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="left-2" />
-              <CarouselNext className="right-2" />
-            </Carousel>
-          </div>
-        </div>
-
-        {/* Enhanced Lightbox */}
-        {selectedItem && (
-          <div 
-            className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in"
-            onClick={() => setSelectedItem(null)}
-          >
-            <div className="relative max-w-5xl max-h-full animate-scale-in">
-              <button
-                onClick={() => setSelectedItem(null)}
-                className="absolute -top-12 right-0 text-white/80 hover:text-white transition-colors duration-200 bg-white/10 backdrop-blur-sm rounded-full p-2"
-              >
-                <X className="w-5 h-5" />
-              </button>
-              
-              <div className="relative rounded-xl overflow-hidden bg-white/5 backdrop-blur-sm p-2">
-                {selectedItem.type === 'video' ? (
-                  <video
-                    src={selectedItem.src}
-                    controls
-                    autoPlay
-                    className="max-w-full max-h-[80vh] rounded-lg"
-                  />
-                ) : (
-                  <img
-                    src={selectedItem.src}
-                    alt="Gallery item"
-                    className="max-w-full max-h-[80vh] object-contain rounded-lg"
-                  />
-                )}
-                
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 rounded-b-lg">
-                  <h3 className="text-white font-semibold text-lg">{selectedItem.title}</h3>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+    <motion.div
+      role="dialog"
+      aria-modal="true"
+      aria-label={item.title}
+      className="fixed inset-0 z-[70] flex flex-col bg-ink/95 text-linen backdrop-blur-md"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={() => setIndex(null)}
+    >
+      <div className="flex items-center justify-between p-4 sm:p-6" onClick={(e) => e.stopPropagation()}>
+        <span className="font-serif text-sm text-linen/60">
+          {String(index + 1).padStart(2, "0")} / {String(list.length).padStart(2, "0")}
+        </span>
+        <button
+          autoFocus
+          onClick={() => setIndex(null)}
+          aria-label="Close"
+          className="grid h-12 w-12 place-items-center rounded-full bg-white/10 transition-colors hover:bg-white/20"
+        >
+          <X size={22} />
+        </button>
       </div>
+
+      <div className="relative flex min-h-0 flex-1 items-center justify-center px-4 sm:px-20">
+        <AnimatePresence mode="popLayout" initial={false}>
+          <motion.div
+            key={item.name}
+            className="flex max-h-full max-w-6xl touch-pan-y items-center justify-center"
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -40 }}
+            transition={{ duration: 0.4, ease }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.4}
+            onDragEnd={(_, info) => {
+              if (info.offset.x < -60) go(1);
+              else if (info.offset.x > 60) go(-1);
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {item.type === "video" ? (
+              <video
+                src={`/media/${item.name}.mp4`}
+                poster={`/media/${item.name}-poster.webp`}
+                controls
+                autoPlay
+                playsInline
+                className="max-h-[72svh] w-auto max-w-full rounded-2xl"
+              />
+            ) : (
+              <img
+                src={`/media/${item.name}.webp`}
+                alt={item.alt}
+                draggable={false}
+                className="max-h-[72svh] w-auto max-w-full rounded-2xl object-contain"
+              />
+            )}
+          </motion.div>
+        </AnimatePresence>
+
+        {[
+          { d: -1, label: "Previous", Icon: CaretLeft, pos: "left-2 sm:left-6" },
+          { d: 1, label: "Next", Icon: CaretRight, pos: "right-2 sm:right-6" },
+        ].map(({ d, label, Icon, pos }) => (
+          <button
+            key={label}
+            aria-label={label}
+            onClick={(e) => {
+              e.stopPropagation();
+              go(d);
+            }}
+            className={`absolute ${pos} hidden h-14 w-14 place-items-center rounded-full bg-white/10 transition-colors hover:bg-brass hover:text-ink sm:grid`}
+          >
+            <Icon size={22} />
+          </button>
+        ))}
+      </div>
+
+      <div className="p-4 pb-[max(1rem,env(safe-area-inset-bottom))] text-center sm:p-6" onClick={(e) => e.stopPropagation()}>
+        <p className="text-[0.65rem] uppercase tracking-[0.2em] text-brass-light">{item.category}</p>
+        <p className="mt-1 font-serif text-xl">{item.title}</p>
+        <p className="mt-2 text-xs text-linen/40 sm:hidden">Swipe to browse</p>
+      </div>
+    </motion.div>
+  );
+};
+
+const Gallery = () => {
+  const [filter, setFilter] = useState("All");
+  const [open, setOpen] = useState<number | null>(null);
+
+  const list = items.filter((it) =>
+    filter === "All" ? true : filter === "Videos" ? it.type === "video" : it.category === filter,
+  );
+
+  return (
+    <section id="gallery" className="section-y">
+      <div className="container-x">
+        <div className="grid gap-6 md:grid-cols-12 md:items-end">
+          <Reveal className="min-w-0 md:col-span-7">
+            <p className="eyebrow">Inside Our Facility</p>
+            <h2 className="heading mt-5 text-ink">Our Gallery</h2>
+            <p className="lead mt-5 max-w-xl">
+              Explore our state-of-the-art facility, quality work, and professional processes
+            </p>
+          </Reveal>
+
+          <Reveal delay={0.1} className="min-w-0 md:col-span-5">
+            <div
+              role="tablist"
+              aria-label="Filter gallery"
+              className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:justify-end md:px-0"
+            >
+              {filters.map((f) => (
+                <button
+                  key={f}
+                  role="tab"
+                  aria-selected={filter === f}
+                  onClick={() => setFilter(f)}
+                  className={`relative shrink-0 rounded-full px-5 py-2.5 text-sm transition-colors ${
+                    filter === f ? "text-linen" : "text-ink/70 ring-1 ring-ink/15 hover:text-ink"
+                  }`}
+                >
+                  {filter === f && (
+                    <motion.span layoutId="gallery-filter" className="absolute inset-0 -z-10 rounded-full bg-ink" transition={{ duration: 0.45, ease }} />
+                  )}
+                  {f}
+                </button>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+
+        <motion.div
+          layout
+          className="mt-10 grid grid-flow-dense auto-rows-[150px] grid-cols-2 gap-3 xs:auto-rows-[190px] sm:mt-14 md:auto-rows-[200px] md:grid-cols-4 md:gap-4 lg:auto-rows-[230px]"
+        >
+          <AnimatePresence mode="popLayout">
+            {list.map((it, i) => (
+              <Tile key={it.name} item={it} i={i} onOpen={() => setOpen(i)} />
+            ))}
+          </AnimatePresence>
+        </motion.div>
+      </div>
+
+      <AnimatePresence>{open !== null && <Lightbox list={list} index={open} setIndex={setOpen} />}</AnimatePresence>
     </section>
   );
 };

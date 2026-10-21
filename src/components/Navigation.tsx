@@ -1,130 +1,184 @@
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
-import logo from "@/assets/els_logo_transparent_bg.png";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
+import { List, X, ArrowUpRight } from "@phosphor-icons/react";
+import { lockScroll, scrollToId } from "@/lib/scroll";
+import { ease, navItems } from "@/lib/constants";
+
+export const Logo = ({ light = false }: { light?: boolean }) => (
+  <span className="flex items-center gap-3">
+    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white ring-1 ring-ink/10 md:h-11 md:w-11">
+      <img src="/media/emblem.webp" alt="" className="h-7 w-auto md:h-8" />
+    </span>
+    <span className={`leading-none ${light ? "text-linen" : "text-ink"}`}>
+      <span className="block font-serif text-[1.05rem] tracking-tight md:text-lg">Elegant Laundry</span>
+      <span className="mt-1 block text-[0.6rem] uppercase tracking-[0.28em] opacity-70">Solutions</span>
+    </span>
+  </span>
+);
 
 const Navigation = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState("");
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const navItems = [
-    { name: 'About', href: '#about' },
-    { name: 'Services', href: '#services' },
-    { name: 'Why Choose Us', href: '#why-choose-us' },
-    // { name: 'Gallery', href: '#gallery' },
-    { name: 'Contact', href: '#contact' }
-  ];
+  useEffect(() => {
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && setActive(e.target.id)),
+      { rootMargin: "-45% 0px -50% 0px" },
+    );
+    navItems.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (el) io.observe(el);
+    });
+    return () => io.disconnect();
+  }, []);
 
-  const handleNavClick = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-    setIsMobileMenuOpen(false);
+  useEffect(() => {
+    lockScroll(open);
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  const go = (id: string) => {
+    setOpen(false);
+    scrollToId(id);
   };
+
+  const solid = scrolled || open;
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 transform-gpu will-change-transform ${
-          isScrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-elegant border-b border-border'
-            : 'bg-white/95 backdrop-blur-md'
-        }`}>
-        <div className="content-container">
-          <div className="flex items-center justify-between h-16 md:h-20">
-            <img
-              src={logo}
-              alt="Elegant Laundry Solutions Logo"
-              className="h-8 w-auto md:h-20"
-            />
-            <div className="text-lg md:text-xl font-bold text-primary">
-              Elegant Laundry Solutions
-            </div>
+      <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-4">
+        <nav
+          aria-label="Primary"
+          className={`mx-auto flex h-16 max-w-7xl items-center justify-between rounded-full pl-2 pr-2 transition-all duration-500 sm:pl-3 ${
+            solid
+              ? "bg-linen/85 shadow-[0_8px_30px_-12px_hsl(var(--ink)/0.25)] ring-1 ring-ink/10 backdrop-blur-xl"
+              : "bg-transparent"
+          }`}
+        >
+          <a
+            href="#hero"
+            onClick={(e) => {
+              e.preventDefault();
+              go("hero");
+            }}
+            aria-label="Elegant Laundry Solutions — back to top"
+            className="rounded-full"
+          >
+            <Logo light={!solid} />
+          </a>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
-              {navItems.map((item) => (
-                <button
-                  key={item.name}
-                  onClick={() => handleNavClick(item.href)}
-                  className="text-foreground hover:text-primary transition-colors duration-200 font-medium"
+          <ul className="hidden items-center gap-1 lg:flex">
+            {navItems.map((item) => (
+              <li key={item.id}>
+                <a
+                  href={`#${item.id}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    go(item.id);
+                  }}
+                  className={`relative rounded-full px-4 py-2 text-sm transition-colors ${
+                    solid ? "text-ink/70 hover:text-ink" : "text-linen/75 hover:text-linen"
+                  } ${active === item.id ? (solid ? "!text-ink" : "!text-linen") : ""}`}
                 >
+                  {active === item.id && (
+                    <motion.span
+                      layoutId="nav-pill"
+                      className={`absolute inset-0 -z-10 rounded-full ${solid ? "bg-ink/[0.06]" : "bg-white/10"}`}
+                      transition={{ duration: 0.5, ease }}
+                    />
+                  )}
                   {item.name}
-                </button>
-              ))}
-            </div>
+                </a>
+              </li>
+            ))}
+          </ul>
 
-            {/* Desktop CTA */}
-            <div className="hidden md:flex items-center space-x-4">
-              <Button 
-                variant="ghost" 
-                onClick={() => handleNavClick('#contact')}
-                className="text-foreground hover:text-primary"
-              >
-                Contact Us
-              </Button>
-              <Button 
-                onClick={() => handleNavClick('#contact')}
-                className="bg-gradient-primary shadow-soft hover:shadow-elegant"
-              >
-                Get Quote
-              </Button>
-            </div>
-
-            {/* Mobile Menu Button */}
+          <div className="flex items-center gap-2">
+            <button onClick={() => go("contact")} className="btn-brass hidden !min-h-[44px] !py-2.5 sm:inline-flex">
+              Get a Quote <ArrowUpRight weight="bold" />
+            </button>
             <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 text-foreground hover:text-primary transition-colors"
+              onClick={() => setOpen(!open)}
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              className={`grid h-12 w-12 place-items-center rounded-full transition-colors lg:hidden ${
+                solid ? "text-ink hover:bg-ink/5" : "text-linen hover:bg-white/10"
+              }`}
             >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {open ? <X size={24} /> : <List size={24} />}
             </button>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </header>
 
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-40 md:hidden">
-          <div className="fixed inset-0 bg-black/20 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)} />
-          <div className="fixed top-16 left-0 right-0 bg-white border-b border-border shadow-elegant">
-            <div className="p-6 space-y-4">
-              {navItems.map((item) => (
-                <button
-                  key={item.name}
-                  onClick={() => handleNavClick(item.href)}
-                  className="block w-full text-left text-foreground hover:text-primary transition-colors font-medium py-2"
+      <motion.div
+        aria-hidden
+        className="fixed inset-x-0 top-0 z-[60] h-[2px] origin-left bg-brass"
+        style={{ scaleX: progress }}
+      />
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            id="mobile-menu"
+            className="fixed inset-0 z-40 flex flex-col bg-linen px-6 pb-10 pt-28 lg:hidden"
+            initial={{ clipPath: "circle(0% at 100% 0%)" }}
+            animate={{ clipPath: "circle(150% at 100% 0%)" }}
+            exit={{ clipPath: "circle(0% at 100% 0%)" }}
+            transition={{ duration: 0.6, ease }}
+          >
+            <ul className="flex-1 space-y-1 overflow-y-auto">
+              {navItems.map((item, i) => (
+                <motion.li
+                  key={item.id}
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15 + i * 0.05, duration: 0.5, ease }}
                 >
-                  {item.name}
-                </button>
+                  <a
+                    href={`#${item.id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      go(item.id);
+                    }}
+                    className="flex items-baseline gap-4 border-b border-ink/10 py-4 font-serif text-3xl font-light text-ink xs:text-4xl"
+                  >
+                    <span className="font-sans text-xs text-brass">0{i + 1}</span>
+                    {item.name}
+                  </a>
+                </motion.li>
               ))}
-              <div className="pt-4 space-y-3">
-                <Button 
-                  variant="outline" 
-                  onClick={() => handleNavClick('#contact')}
-                  className="mobile-button justify-center"
-                >
-                  Contact Us
-                </Button>
-                <Button 
-                  onClick={() => handleNavClick('#contact')}
-                  className="mobile-button justify-center"
-                >
-                  Get Quote
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+            </ul>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="space-y-3 pt-6"
+            >
+              <button onClick={() => go("contact")} className="btn-ink w-full">
+                Get a Quote <ArrowUpRight weight="bold" />
+              </button>
+              <a href="tel:+918669089364" className="btn-ghost-dark w-full">
+                Call +91 86690 89364
+              </a>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
