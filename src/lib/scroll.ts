@@ -22,7 +22,7 @@ export const startSmoothScroll = () => {
 export const scrollToId = (id: string) => {
   const el = document.getElementById(id);
   if (!el) return;
-  if (lenis) lenis.scrollTo(el, { offset: -72 });
+  if (lenis) lenis.scrollTo(el, { offset: -parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--nav-h")) * 16 });
   else el.scrollIntoView({ behavior: "smooth" });
 };
 

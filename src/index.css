@@ -35,7 +35,13 @@
     --ring: var(--brass);
     --radius: 1rem;
 
-    --nav-h: 4.5rem;
+    --nav-h: 5.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --nav-h: 6rem;
+    }
   }
 
   html {

@@ -45,16 +45,18 @@ const Field = ({
   label,
   error,
   select = false,
+  grow = false,
   children,
 }: {
   name: Fields;
   label: string;
   error?: string;
   select?: boolean;
+  grow?: boolean;
   children: ReactNode;
 }) => (
-  <div>
-    <div className="relative">
+  <div className={grow ? "flex flex-1 flex-col" : undefined}>
+    <div className={`relative ${grow ? "flex flex-1 flex-col" : ""}`}>
       {children}
       <label
         htmlFor={name}
@@ -225,12 +227,17 @@ const ContactForm = () => {
         </div>
 
         {/* Form */}
-        <Reveal delay={0.15} className="lg:col-span-7">
-          <div className="relative rounded-3xl bg-linen p-5 text-ink shadow-2xl sm:rounded-[2rem] sm:p-10">
+        {/* Card fills the viewport below the nav; sticks beside the info column on desktop. */}
+        <Reveal delay={0.15} className="lg:sticky lg:top-[calc(var(--nav-h)+1.5rem)] lg:col-span-7 lg:self-start">
+          <div className="relative flex min-h-[calc(100svh-var(--nav-h)-3rem)] flex-col rounded-3xl bg-linen p-5 text-ink shadow-2xl sm:rounded-[2rem] sm:p-10">
             <h3 className="text-2xl font-light sm:text-3xl">Request a Quote</h3>
             <p className="mt-2 text-sm text-muted-foreground">All fields are required.</p>
 
-            <form onSubmit={handleSubmit} noValidate className="mt-8 grid gap-4 sm:grid-cols-2">
+            <form
+              onSubmit={handleSubmit}
+              noValidate
+              className="mt-8 grid flex-1 grid-rows-[repeat(5,auto)_1fr_auto] gap-4 sm:grid-cols-2 sm:grid-rows-[auto_auto_auto_1fr_auto]"
+            >
               <Field name="name" label="Name" error={errors.name}>
                 <input type="text" autoComplete="name" {...fieldProps("name", errors)} />
               </Field>
@@ -263,9 +270,13 @@ const ContactForm = () => {
                   <CaretDown className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 </Field>
               </div>
-              <div className="sm:col-span-2">
-                <Field name="details" label="Additional Details" error={errors.details}>
-                  <textarea rows={4} {...fieldProps("details", errors)} className={`${fieldProps("details", errors).className} resize-none`} />
+              <div className="flex flex-col sm:col-span-2">
+                <Field name="details" label="Additional Details" error={errors.details} grow>
+                  <textarea
+                    rows={4}
+                    {...fieldProps("details", errors)}
+                    className={`${fieldProps("details", errors).className} min-h-[7.5rem] flex-1 resize-none`}
+                  />
                 </Field>
                 <p className="mt-1.5 pl-1 text-xs text-muted-foreground">
                   Tell us about your laundry volume, frequency, special requirements, etc.

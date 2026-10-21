@@ -4,16 +4,16 @@ import { List, X, ArrowUpRight } from "@phosphor-icons/react";
 import { lockScroll, scrollToId } from "@/lib/scroll";
 import { ease, navItems } from "@/lib/constants";
 
-export const Logo = ({ light = false }: { light?: boolean }) => (
-  <span className="flex items-center gap-3">
-    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white ring-1 ring-ink/10 md:h-11 md:w-11">
-      <img src="/media/emblem.webp" alt="" className="h-7 w-auto md:h-8" />
-    </span>
-    <span className={`leading-none ${light ? "text-linen" : "text-ink"}`}>
-      <span className="block font-serif text-[1.05rem] tracking-tight md:text-lg">Elegant Laundry</span>
-      <span className="mt-1 block text-[0.6875rem] uppercase tracking-[0.26em] opacity-70">Solutions</span>
-    </span>
-  </span>
+export const Logo = ({ className = "", sizes = "80px" }: { className?: string; sizes?: string }) => (
+  <img
+    src="/media/logo-sm.webp"
+    srcSet="/media/logo-sm.webp 320w, /media/logo.webp 960w"
+    sizes={sizes}
+    alt="Elegant Laundry Solutions — Hospitality Linen Care"
+    width={320}
+    height={260}
+    className={`h-auto ${className}`}
+  />
 );
 
 const Navigation = () => {
@@ -62,7 +62,7 @@ const Navigation = () => {
       <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-4">
         <nav
           aria-label="Primary"
-          className={`mx-auto flex h-16 max-w-7xl items-center justify-between rounded-full pl-2 pr-2 transition-all duration-500 sm:pl-3 ${
+          className={`mx-auto flex h-[4.5rem] max-w-7xl lg:h-20 items-center justify-between rounded-[1.75rem] pl-2 pr-2 transition-all duration-500 sm:pl-3 ${
             solid
               ? "bg-linen/85 shadow-[0_8px_30px_-12px_hsl(var(--ink)/0.25)] ring-1 ring-ink/10 backdrop-blur-xl"
               : "bg-transparent"
@@ -75,9 +75,9 @@ const Navigation = () => {
               go("hero");
             }}
             aria-label="Elegant Laundry Solutions — back to top"
-            className="rounded-full"
+            className="rounded-2xl bg-white/95 px-2 py-1 shadow-sm ring-1 ring-ink/5"
           >
-            <Logo light={!solid} />
+            <Logo className="w-[4.5rem] lg:w-[5.25rem]" />
           </a>
 
           <ul className="hidden items-center gap-1 lg:flex">
