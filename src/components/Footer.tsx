@@ -1,6 +1,17 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { FacebookLogo, InstagramLogo, LinkedinLogo, XLogo, WhatsappLogo, ArrowUp } from "@phosphor-icons/react";
+import {
+  FacebookLogo,
+  InstagramLogo,
+  LinkedinLogo,
+  XLogo,
+  WhatsappLogo,
+  ArrowUp,
+  Phone,
+  EnvelopeSimple,
+  Clock,
+  Check,
+} from "@phosphor-icons/react";
 import { Logo } from "@/components/Navigation";
 import { navItems } from "@/lib/constants";
 import { scrollToId } from "@/lib/scroll";
@@ -54,12 +65,21 @@ export const WhatsAppFab = () => {
 const heading = "font-sans text-xs font-medium uppercase tracking-[0.18em] text-harbor";
 const link = "transition-colors hover:text-brass";
 
+const contactRows = [
+  { Icon: Phone, text: "+91-9158660092", href: "tel:+919158660092" },
+  { Icon: Phone, text: "+91-8669089364", href: "tel:+918669089364" },
+  { Icon: EnvelopeSimple, text: "elegantlaundrysolutions@gmail.com", href: "mailto:elegantlaundrysolutions@gmail.com" },
+  { Icon: Clock, text: "24/7 Service" },
+];
+
+// Mobile: brand, contact card, then links and services as centred wrap rows.
+// Tablet/desktop: brand, links, services, contact as columns.
 const Footer = () => (
   <footer className="relative overflow-hidden bg-linen text-ink">
     <div className="container-x pt-16 sm:pt-20">
-      <div className="grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 lg:grid-cols-12 lg:items-start">
-        <div className="col-span-2 flex flex-col items-center text-center sm:col-span-3 lg:col-span-5 lg:items-start lg:text-left">
-          <Logo className="w-60 sm:w-72 lg:w-80" sizes="(min-width: 1024px) 320px, 288px" />
+      <div className="grid gap-y-10 sm:grid-cols-3 sm:gap-x-6 sm:gap-y-12 lg:grid-cols-12 lg:items-start">
+        <div className="flex flex-col items-center text-center sm:col-span-3 lg:col-span-4 lg:items-start lg:text-left">
+          <Logo className="w-56 sm:w-72 lg:w-80" sizes="(min-width: 1024px) 320px, 288px" />
           <p className="mt-6 max-w-sm leading-relaxed text-muted-foreground">
             Your trusted partner for professional commercial laundry services. Serving the hospitality industry with
             excellence for over 10 years.
@@ -82,9 +102,38 @@ const Footer = () => (
           )}
         </div>
 
-        <nav aria-label="Footer" className="lg:col-span-2 lg:pt-6">
+        <div className="sm:order-last sm:col-span-1 lg:col-span-4 lg:pt-6">
+          <h4 className={`${heading} text-center sm:text-left`}>Contact Info</h4>
+          <ul className="mt-5 divide-y divide-ink/10 overflow-hidden rounded-2xl bg-paper ring-1 ring-ink/10 sm:divide-y-0 sm:rounded-none sm:bg-transparent sm:ring-0">
+            {contactRows.map(({ Icon, text, href }) => {
+              const body = (
+                <>
+                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-mist text-harbor sm:h-8 sm:w-8">
+                    <Icon size={18} weight="duotone" />
+                  </span>
+                  {/* zero-width space lets a long email wrap before the @ instead of mid-word */}
+                  <span className="min-w-0 [overflow-wrap:anywhere]">{text.replace("@", "\u200B@")}</span>
+                </>
+              );
+              const row = "flex items-center gap-3 px-4 py-3 text-ink/80 sm:px-0 sm:py-1.5";
+              return (
+                <li key={text}>
+                  {href ? (
+                    <a href={href} className={`${row} ${link}`}>
+                      {body}
+                    </a>
+                  ) : (
+                    <span className={`${row} text-sm`}>{body}</span>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+
+        <nav aria-label="Footer" className="text-center sm:text-left lg:col-span-2 lg:pt-6">
           <h4 className={heading}>Quick Links</h4>
-          <ul className="mt-5 space-y-3 text-ink/70">
+          <ul className="mt-4 flex flex-wrap justify-center gap-x-5 gap-y-2 text-ink/70 sm:mt-5 sm:block sm:space-y-3">
             {navItems.map((n) => (
               <li key={n.id}>
                 <a
@@ -93,7 +142,7 @@ const Footer = () => (
                     e.preventDefault();
                     scrollToId(n.id);
                   }}
-                  className={link}
+                  className={`inline-block py-1 sm:py-0 ${link}`}
                 >
                   {n.name}
                 </a>
@@ -102,39 +151,23 @@ const Footer = () => (
           </ul>
         </nav>
 
-        <div className="lg:col-span-2 lg:pt-6">
+        <div className="text-center sm:text-left lg:col-span-2 lg:pt-6">
           <h4 className={heading}>Our Services</h4>
-          <ul className="mt-5 space-y-3 text-ink/70">
+          <ul className="mt-4 flex flex-wrap justify-center gap-2 text-ink/70 sm:mt-5 sm:block sm:space-y-3">
             {services.map((s) => (
-              <li key={s}>{s}</li>
+              <li
+                key={s}
+                className="flex items-center gap-1.5 rounded-full bg-paper px-3 py-1.5 text-sm ring-1 ring-ink/10 sm:rounded-none sm:bg-transparent sm:p-0 sm:text-base sm:ring-0"
+              >
+                <Check size={12} weight="bold" className="text-brass sm:hidden" />
+                {s}
+              </li>
             ))}
-          </ul>
-        </div>
-
-        <div className="col-span-2 sm:col-span-1 lg:col-span-3 lg:pt-6">
-          <h4 className={heading}>Contact Info</h4>
-          <ul className="mt-5 space-y-3 text-ink/70">
-            <li>
-              <a href="tel:+919158660092" className={link}>
-                +91-9158660092
-              </a>
-            </li>
-            <li>
-              <a href="tel:+918669089364" className={link}>
-                +91-8669089364
-              </a>
-            </li>
-            <li className="text-sm text-muted-foreground">24/7 Service</li>
-            <li>
-              <a href="mailto:elegantlaundrysolutions@gmail.com" className={`[overflow-wrap:anywhere] ${link}`}>
-                elegantlaundrysolutions@gmail.com
-              </a>
-            </li>
           </ul>
         </div>
       </div>
 
-      <div className="mt-14 flex flex-col-reverse items-start justify-between gap-4 border-t border-ink/10 py-6 text-sm text-muted-foreground sm:mt-16 sm:flex-row sm:items-center">
+      <div className="mt-12 flex flex-col items-center justify-between gap-2 border-t border-ink/10 py-6 text-center text-sm text-muted-foreground sm:mt-16 sm:flex-row sm:text-left">
         <p>&copy; {new Date().getFullYear()} Elegant Laundry Solutions. All rights reserved.</p>
         <button
           onClick={() => scrollToId("hero")}
