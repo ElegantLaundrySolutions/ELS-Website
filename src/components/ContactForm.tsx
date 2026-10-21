@@ -157,7 +157,7 @@ const ContactForm = () => {
             <h2 className="heading mt-5">
               Get a <em className="text-brass-light">Quote</em>
             </h2>
-            <p className="mt-6 text-base leading-relaxed text-linen/70 sm:text-lg">
+            <p className="mt-5 text-[0.9375rem] leading-relaxed text-linen/70 sm:mt-6 sm:text-lg">
               Ready to experience the difference professional commercial laundry services can make? Contact us for a
               personalized quote tailored to your business needs.
             </p>
@@ -226,8 +226,8 @@ const ContactForm = () => {
 
         {/* Form */}
         <Reveal delay={0.15} className="lg:col-span-7">
-          <div className="relative rounded-[2rem] bg-linen p-6 text-ink shadow-2xl sm:p-10">
-            <h3 className="text-3xl font-light">Request a Quote</h3>
+          <div className="relative rounded-3xl bg-linen p-5 text-ink shadow-2xl sm:rounded-[2rem] sm:p-10">
+            <h3 className="text-2xl font-light sm:text-3xl">Request a Quote</h3>
             <p className="mt-2 text-sm text-muted-foreground">All fields are required.</p>
 
             <form onSubmit={handleSubmit} noValidate className="mt-8 grid gap-4 sm:grid-cols-2">

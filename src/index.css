@@ -90,7 +90,7 @@
   }
 
   .section-y {
-    @apply py-20 sm:py-24 lg:py-32;
+    @apply py-16 sm:py-24 lg:py-32;
   }
 
   .eyebrow {
@@ -104,16 +104,16 @@
 
   .display {
     @apply font-serif font-light tracking-tight leading-[1.02];
-    font-size: clamp(2.5rem, min(5vw, 8.5svh), 4.5rem);
+    font-size: clamp(2.125rem, min(5vw, 8.5svh), 4.5rem);
   }
 
   .heading {
     @apply font-serif font-light tracking-tight leading-[1.08];
-    font-size: clamp(2rem, 4.5vw, 3.5rem);
+    font-size: clamp(1.75rem, 4.5vw, 3.5rem);
   }
 
   .lead {
-    @apply text-base sm:text-lg leading-relaxed text-muted-foreground;
+    @apply text-[0.9375rem] sm:text-lg leading-relaxed text-muted-foreground;
   }
 
   .btn {

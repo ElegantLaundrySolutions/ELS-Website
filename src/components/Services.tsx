@@ -61,9 +61,9 @@ const Card = ({
     <div className="stack:sticky" style={{ top: `calc(var(--nav-h) + 2rem + ${i * 1.75}rem)` }}>
       <motion.article
         style={{ scale }}
-        className="grid origin-top overflow-hidden rounded-[2rem] bg-paper ring-1 ring-ink/10 shadow-[0_30px_60px_-30px_hsl(var(--ink)/0.35)] md:min-h-[460px] md:grid-cols-2"
+        className="grid origin-top overflow-hidden rounded-3xl bg-paper ring-1 sm:rounded-[2rem] ring-ink/10 shadow-[0_30px_60px_-30px_hsl(var(--ink)/0.35)] md:min-h-[460px] md:grid-cols-2"
       >
-        <div className="relative aspect-[16/10] overflow-hidden md:order-2 md:aspect-auto">
+        <div className="relative aspect-[2/1] overflow-hidden sm:aspect-[16/9] md:order-2 md:aspect-auto">
           <img
             src={`${service.image}.webp`}
             srcSet={`${service.image}-sm.webp 640w, ${service.image}-md.webp 1024w, ${service.image}.webp 1600w`}
@@ -73,24 +73,31 @@ const Card = ({
               decoding="async"
             className="absolute inset-0 h-full w-full object-cover saturate-[0.85]"
           />
-          <span className="absolute left-5 top-5 rounded-full bg-linen/90 px-3 py-1 font-serif text-sm text-ink backdrop-blur">
+          <span className="absolute left-4 top-4 rounded-full bg-linen/90 px-2.5 py-0.5 font-serif text-xs sm:left-5 sm:top-5 sm:px-3 sm:py-1 sm:text-sm text-ink backdrop-blur">
             0{i + 1}
           </span>
         </div>
 
-        <div className="flex flex-col justify-between gap-8 p-6 sm:p-10 lg:p-12">
+        <div className="flex flex-col justify-between gap-5 p-5 sm:gap-8 sm:p-10 lg:p-12">
           <div>
-            <span className="grid h-14 w-14 place-items-center rounded-2xl bg-mist text-harbor">
-              <Icon size={28} weight="duotone" />
-            </span>
-            <h3 className="mt-6 text-3xl font-light tracking-tight text-ink sm:text-4xl">{service.title}</h3>
-            <p className="mt-4 max-w-md leading-relaxed text-muted-foreground">{service.description}</p>
+            <div className="flex items-center gap-3 sm:block">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-mist text-harbor sm:h-14 sm:w-14 sm:rounded-2xl">
+                <Icon weight="duotone" className="h-5 w-5 sm:h-7 sm:w-7" />
+              </span>
+              <h3 className="text-2xl font-light tracking-tight text-ink sm:mt-6 sm:text-4xl">{service.title}</h3>
+            </div>
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground sm:mt-4 sm:text-base">
+              {service.description}
+            </p>
           </div>
-          <ul className="grid gap-3 border-t border-ink/10 pt-6 sm:grid-cols-1">
+          <ul className="flex flex-wrap gap-2 border-t border-ink/10 pt-4 sm:grid sm:gap-3 sm:pt-6">
             {service.features.map((f) => (
-              <li key={f} className="flex items-center gap-3 text-sm text-ink">
-                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-brass/15 text-brass">
-                  <Check size={14} weight="bold" />
+              <li
+                key={f}
+                className="flex items-center gap-1.5 rounded-full bg-mist/70 py-1 pl-1.5 pr-3 text-xs text-ink sm:gap-3 sm:bg-transparent sm:p-0 sm:text-sm"
+              >
+                <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-brass/15 text-brass sm:h-6 sm:w-6">
+                  <Check size={12} weight="bold" />
                 </span>
                 {f}
               </li>
@@ -119,7 +126,7 @@ const Services = () => {
           </Reveal>
         </div>
 
-        <div ref={ref} className="mt-12 space-y-6 md:mt-16 md:space-y-10">
+        <div ref={ref} className="mt-10 space-y-4 sm:space-y-6 md:mt-16 md:space-y-10">
           {services.map((s, i) => (
             <Card key={s.title} service={s} i={i} progress={scrollYProgress} />
           ))}

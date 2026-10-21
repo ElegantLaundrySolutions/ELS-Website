@@ -23,11 +23,11 @@ const IndustriesServed = () => (
     {/* marquee — duplicated list so the loop is seamless */}
     <div
       aria-hidden
-      className="group mt-12 overflow-hidden border-y border-ink/10 py-6 [mask-image:linear-gradient(90deg,transparent,#000_10%,#000_90%,transparent)] sm:mt-16"
+      className="group mt-10 overflow-hidden border-y border-ink/10 py-4 sm:py-6 [mask-image:linear-gradient(90deg,transparent,#000_10%,#000_90%,transparent)] sm:mt-16"
     >
       <div className="flex w-max animate-marquee gap-10 group-hover:[animation-play-state:paused] sm:gap-16">
         {[...industries, ...industries, ...industries, ...industries].map((ind, i) => (
-          <span key={i} className="flex items-center gap-10 font-serif text-3xl font-light italic text-ink/80 sm:gap-16 sm:text-5xl">
+          <span key={i} className="flex items-center gap-10 font-serif text-2xl font-light italic text-ink/80 sm:gap-16 sm:text-5xl">
             {ind.name}
             <Sparkle size={20} weight="fill" className="text-brass" />
           </span>
@@ -36,19 +36,20 @@ const IndustriesServed = () => (
     </div>
 
     <div className="container-x">
-      <ul className="mt-12 grid grid-cols-1 gap-px overflow-hidden rounded-3xl bg-ink/10 ring-1 ring-ink/10 xs:grid-cols-2 sm:mt-16 lg:grid-cols-4">
+      <ul className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-3xl bg-ink/10 ring-1 ring-ink/10 sm:mt-16 lg:grid-cols-4">
         {industries.map((ind, i) => {
           const Icon = ind.icon;
           return (
             <li key={ind.name} className="group bg-linen">
-              <Reveal delay={i * 0.08} className="flex h-full flex-col p-6 transition-colors duration-500 group-hover:bg-paper sm:p-8">
+              <Reveal delay={i * 0.08} className="flex h-full flex-col p-4 transition-colors duration-500 group-hover:bg-paper xs:p-5 sm:p-8">
                 <Icon
-                  size={40}
                   weight="light"
-                  className="text-harbor transition-transform duration-500 group-hover:-translate-y-1 group-hover:text-brass"
+                  className="h-8 w-8 text-harbor sm:h-10 sm:w-10 transition-transform duration-500 group-hover:-translate-y-1 group-hover:text-brass"
                 />
-                <h3 className="mt-8 text-2xl font-light text-ink sm:mt-12">{ind.name}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-base">{ind.description}</p>
+                <h3 className="mt-5 text-lg font-light leading-tight text-ink sm:mt-12 sm:text-2xl">{ind.name}</h3>
+                <p className="mt-1.5 text-[0.8125rem] leading-snug text-muted-foreground sm:mt-2 sm:text-base sm:leading-relaxed">
+                  {ind.description}
+                </p>
               </Reveal>
             </li>
           );

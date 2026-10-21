@@ -66,14 +66,16 @@ const WhyChooseUs = () => (
         </Reveal>
       </div>
 
-      <div className="mt-12 grid auto-rows-fr gap-4 sm:mt-16 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-10 grid gap-3 sm:mt-16 sm:auto-rows-fr sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
         {features.map((f, i) => {
           const Icon = f.icon;
           return (
             <Reveal key={f.title} delay={(i % 3) * 0.08} className={f.span}>
               <article
                 onPointerMove={track}
-                className={`group relative flex h-full flex-col justify-between gap-10 overflow-hidden rounded-[1.75rem] p-7 ring-1 transition-colors duration-500 sm:p-8 ${
+                className={`group relative flex h-full overflow-hidden rounded-2xl ring-1 transition-colors duration-500 sm:flex-col sm:items-stretch sm:justify-between sm:gap-10 sm:rounded-[1.75rem] sm:p-8 ${
+                  f.feature ? "flex-col gap-6 p-6" : "items-start gap-4 p-5"
+                } ${
                   f.feature ? "bg-ink text-linen ring-ink" : "bg-paper text-ink ring-ink/10 hover:ring-brass/40"
                 }`}
               >
@@ -84,21 +86,34 @@ const WhyChooseUs = () => (
                     background: `radial-gradient(320px circle at var(--x) var(--y), hsl(var(--brass) / ${f.feature ? 0.25 : 0.12}), transparent 70%)`,
                   }}
                 />
-                <div className="relative flex items-start justify-between">
+                <div className="relative flex shrink-0 items-start justify-between">
                   <Icon
-                    size={f.feature ? 56 : 36}
                     weight="duotone"
-                    className={f.feature ? "text-brass-light" : "text-harbor"}
+                    className={
+                      f.feature
+                        ? "h-11 w-11 text-brass-light sm:h-14 sm:w-14"
+                        : "h-7 w-7 text-harbor sm:h-9 sm:w-9"
+                    }
                   />
-                  <span className={`font-serif text-sm ${f.feature ? "text-linen/40" : "text-ink/30"}`}>0{i + 1}</span>
+                  <span
+                    className={`font-serif text-sm ${f.feature ? "text-linen/40" : "hidden text-ink/30 sm:inline"}`}
+                  >
+                    0{i + 1}
+                  </span>
                 </div>
                 <div className="relative">
-                  <h3 className={`font-light tracking-tight ${f.feature ? "text-4xl sm:text-5xl" : "text-2xl"}`}>
+                  <h3
+                    className={`font-light tracking-tight ${
+                      f.feature ? "text-3xl sm:text-5xl" : "text-lg leading-snug sm:text-2xl"
+                    }`}
+                  >
                     {f.title}
                   </h3>
                   <p
-                    className={`mt-3 leading-relaxed ${
-                      f.feature ? "max-w-sm text-lg text-linen/70" : "text-sm text-muted-foreground sm:text-base"
+                    className={`leading-relaxed ${
+                      f.feature
+                        ? "mt-2 max-w-sm text-[0.9375rem] text-linen/70 sm:mt-3 sm:text-lg"
+                        : "mt-1 text-sm text-muted-foreground sm:mt-3 sm:text-base"
                     }`}
                   >
                     {f.description}

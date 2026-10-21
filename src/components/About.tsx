@@ -31,7 +31,7 @@ const About = () => {
 
   return (
     <section id="about" className="section-y bg-paper">
-      <div className="container-x grid items-center gap-16 lg:grid-cols-2 lg:gap-20">
+      <div className="container-x grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
         <div ref={imgRef} className="relative order-2 mx-4 sm:mx-8 lg:order-1 lg:mx-0">
           <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] sm:aspect-[5/4] lg:aspect-[4/5]">
             <motion.img
@@ -76,7 +76,7 @@ const About = () => {
             </p>
           </Reveal>
 
-          <ol ref={listRef} className="relative mt-10 space-y-8">
+          <ol ref={listRef} className="relative mt-8 space-y-6 sm:mt-10 sm:space-y-8">
             {/* line that draws as you scroll */}
             <span aria-hidden className="absolute bottom-2 left-[1.375rem] top-2 w-px bg-ink/10" />
             <motion.span
@@ -93,8 +93,8 @@ const About = () => {
                       <Icon size={20} weight="duotone" />
                     </span>
                     <div className="pt-1.5">
-                      <h3 className="text-xl font-normal text-ink">{p.title}</h3>
-                      <p className="mt-2 leading-relaxed text-muted-foreground">{p.text}</p>
+                      <h3 className="text-lg font-normal text-ink sm:text-xl">{p.title}</h3>
+                      <p className="mt-1.5 text-[0.9375rem] leading-relaxed text-muted-foreground sm:mt-2 sm:text-base">{p.text}</p>
                     </div>
                   </Reveal>
                 </li>
