@@ -149,6 +149,17 @@
   }
 }
 
+/* Short phones: keep the one-screen quote form from overflowing. */
+@media (max-height: 760px) and (max-width: 639px) {
+  .field {
+    padding-top: 1.3rem;
+    padding-bottom: 0.4rem;
+  }
+  .field-label {
+    top: 0.85rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

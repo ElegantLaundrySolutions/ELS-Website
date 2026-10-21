@@ -229,14 +229,15 @@ const ContactForm = () => {
         {/* Form */}
         {/* Card fills the viewport below the nav; sticks beside the info column on desktop. */}
         <Reveal delay={0.15} className="lg:sticky lg:top-[calc(var(--nav-h)+1.5rem)] lg:col-span-7 lg:self-start">
-          <div className="relative flex min-h-[calc(100svh-var(--nav-h)-3rem)] flex-col rounded-3xl bg-linen p-5 text-ink shadow-2xl sm:rounded-[2rem] sm:p-10">
+          {/* Mobile: exactly one screen tall, top padding keeps the heading clear of the floating nav. */}
+          <div className="relative flex min-h-[100svh] flex-col rounded-3xl bg-linen p-5 pt-[calc(var(--nav-h)+0.5rem)] text-ink shadow-2xl sm:min-h-[calc(100svh-var(--nav-h)-3rem)] sm:rounded-[2rem] sm:p-10">
             <h3 className="text-2xl font-light sm:text-3xl">Request a Quote</h3>
             <p className="mt-2 text-sm text-muted-foreground">All fields are required.</p>
 
             <form
               onSubmit={handleSubmit}
               noValidate
-              className="mt-8 grid flex-1 grid-rows-[repeat(5,auto)_1fr_auto] gap-4 sm:grid-cols-2 sm:grid-rows-[auto_auto_auto_1fr_auto]"
+              className="mt-8 grid flex-1 grid-rows-[repeat(5,auto)_1fr_auto] gap-4 [@media(max-height:760px)]:mt-5 [@media(max-height:760px)]:gap-3 sm:grid-cols-2 sm:grid-rows-[auto_auto_auto_1fr_auto]"
             >
               <Field name="name" label="Name" error={errors.name}>
                 <input type="text" autoComplete="name" {...fieldProps("name", errors)} />
@@ -273,9 +274,9 @@ const ContactForm = () => {
               <div className="flex flex-col sm:col-span-2">
                 <Field name="details" label="Additional Details" error={errors.details} grow>
                   <textarea
-                    rows={4}
+                    rows={2}
                     {...fieldProps("details", errors)}
-                    className={`${fieldProps("details", errors).className} min-h-[7.5rem] flex-1 resize-none`}
+                    className={`${fieldProps("details", errors).className} min-h-[7.5rem] flex-1 resize-none [@media(max-height:760px)]:min-h-[4rem]`}
                   />
                 </Field>
                 <p className="mt-1.5 pl-1 text-xs text-muted-foreground">
