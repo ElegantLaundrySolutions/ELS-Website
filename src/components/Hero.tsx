@@ -102,7 +102,7 @@ const Hero = () => {
           </h1>
 
           <motion.p
-            className="mt-5 max-w-xl text-[0.9375rem] leading-relaxed text-linen/70 sm:mt-8 sm:text-lg"
+            className="mt-6 max-w-xl text-base leading-relaxed text-linen/70 sm:mt-8 sm:text-lg"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease, delay: 0.8 }}
@@ -184,7 +184,7 @@ const Hero = () => {
           {stats.map((s) => (
             <div key={s.label} className="px-2 py-5 text-center sm:px-6 sm:py-6">
               <dt className="sr-only">{s.label}</dt>
-              <dd className="font-serif text-[1.75rem] font-light text-brass-light sm:text-5xl">
+              <dd className="font-serif text-3xl font-light text-brass-light sm:text-5xl">
                 <Counter value={s.value} />
               </dd>
               <dd className="mt-1 text-[0.6875rem] uppercase leading-tight tracking-[0.1em] text-linen/60 xs:text-xs sm:mt-2 sm:tracking-[0.14em]">

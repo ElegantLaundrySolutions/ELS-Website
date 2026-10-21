@@ -104,7 +104,7 @@
 
   .display {
     @apply font-serif font-light tracking-tight leading-[1.02];
-    font-size: clamp(2.125rem, min(5vw, 8.5svh), 4.5rem);
+    font-size: clamp(2.5rem, min(5vw, 8.5svh), 4.5rem);
   }
 
   .heading {
