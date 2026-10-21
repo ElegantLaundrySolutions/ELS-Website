@@ -1,73 +1,131 @@
-import { Clock, Shield, Leaf, Truck, DollarSign, Award } from "lucide-react";
+import type { PointerEvent } from "react";
+import { Clock, Truck, Leaf, ShieldCheck, Handshake, Medal } from "@phosphor-icons/react";
+import { Reveal } from "@/components/motion";
 
 const features = [
   {
+    icon: Medal,
+    title: "Quality Guarantee",
+    description: "100% satisfaction guarantee with re-cleaning at no additional cost",
+    span: "sm:col-span-2 lg:row-span-2",
+    feature: true,
+  },
+  {
     icon: Clock,
     title: "Timely Pickup & Delivery",
-    description: "Scheduled pickups and deliveries that fit your business schedule"
+    description: "Scheduled pickups and deliveries that fit your business schedule",
+    span: "sm:col-span-2",
   },
   {
     icon: Truck,
     title: "Bulk Handling Capacity",
-    description: "Equipment and processes designed for high-volume commercial loads"
+    description: "Equipment and processes designed for high-volume commercial loads",
+    span: "",
   },
   {
     icon: Leaf,
     title: "Eco-Friendly Detergents",
-    description: "Environmentally conscious cleaning solutions that are gentle yet effective"
+    description: "Environmentally conscious cleaning solutions that are gentle yet effective",
+    span: "",
   },
   {
-    icon: Shield,
+    icon: ShieldCheck,
     title: "Strict Hygiene Standards",
-    description: "Hospital-grade sanitization processes exceeding industry requirements"
+    description: "Hospital-grade sanitization processes exceeding industry requirements",
+    span: "sm:col-span-2",
   },
   {
-    icon: DollarSign,
+    icon: Handshake,
     title: "Custom Pricing for Businesses",
-    description: "Competitive rates tailored to your volume and service requirements"
+    description: "Competitive rates tailored to your volume and service requirements",
+    span: "sm:col-span-2",
   },
-  {
-    icon: Award,
-    title: "Quality Guarantee",
-    description: "100% satisfaction guarantee with re-cleaning at no additional cost"
-  }
 ];
 
-const WhyChooseUs = () => {
-  return (
-    <section id="why-choose-us" className="mobile-spacing section-bg-muted">
-      <div className="content-container">
-        <div className="text-center mb-8 md:mb-12 reveal">
-          <h2 className="heading-lg mb-4 text-foreground">
-            Why Choose Us
+// Feeds the pointer position to the card's spotlight gradient.
+const track = (e: PointerEvent<HTMLElement>) => {
+  const r = e.currentTarget.getBoundingClientRect();
+  e.currentTarget.style.setProperty("--x", `${e.clientX - r.left}px`);
+  e.currentTarget.style.setProperty("--y", `${e.clientY - r.top}px`);
+};
+
+const WhyChooseUs = () => (
+  <section id="why-choose-us" className="section-y">
+    <div className="container-x">
+      <div className="grid gap-6 md:grid-cols-12 md:items-end">
+        <Reveal className="md:col-span-6">
+          <p className="eyebrow">Why Choose Us</p>
+          <h2 className="heading mt-5 text-ink">
+            Why Choose <em className="text-harbor">Us</em>
           </h2>
-          <p className="text-lead max-w-2xl mx-auto">
+        </Reveal>
+        <Reveal delay={0.1} className="md:col-span-5 md:col-start-8">
+          <p className="lead">
             Your trusted partner committed to excellence, reliability, and the highest standards of commercial cleaning
           </p>
-        </div>
-        
-        <div className="why-choose-grid max-w-6xl mx-auto">
-          {features.map((feature, index) => (
-            <div 
-              key={feature.title}
-              className="why-choose-card card-glow scroll-slide-left group"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <div className="mobile-icon mx-auto mb-6 bg-primary-light rounded-2xl flex items-center justify-center group-hover:bg-primary transition-all duration-500 group-hover:scale-110 group-hover:rotate-3">
-                <feature.icon className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-primary group-hover:text-white transition-all duration-500" />
-              </div>
-              <h3 className="text-lg md:text-xl lg:text-2xl font-semibold mb-4 text-foreground text-center group-hover:text-primary transition-colors duration-300">
-                {feature.title}
-              </h3>
-              <p className="text-sm md:text-base lg:text-lg text-muted-foreground leading-relaxed text-center">
-                {feature.description}
-              </p>
-            </div>
-          ))}
-        </div>
+        </Reveal>
       </div>
-    </section>
-  );
-};
+
+      <div className="mt-10 grid gap-3 sm:mt-16 sm:auto-rows-fr sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+        {features.map((f, i) => {
+          const Icon = f.icon;
+          return (
+            <Reveal key={f.title} delay={(i % 3) * 0.08} className={f.span}>
+              <article
+                onPointerMove={track}
+                className={`group relative flex h-full overflow-hidden rounded-2xl ring-1 transition-colors duration-500 sm:flex-col sm:items-stretch sm:justify-between sm:gap-10 sm:rounded-[1.75rem] sm:p-8 ${
+                  f.feature ? "flex-col gap-6 p-6" : "items-start gap-4 p-5"
+                } ${
+                  f.feature ? "bg-ink text-linen ring-ink" : "bg-paper text-ink ring-ink/10 hover:ring-brass/40"
+                }`}
+              >
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                  style={{
+                    background: `radial-gradient(320px circle at var(--x) var(--y), hsl(var(--brass) / ${f.feature ? 0.25 : 0.12}), transparent 70%)`,
+                  }}
+                />
+                <div className="relative flex shrink-0 items-start justify-between">
+                  <Icon
+                    weight="duotone"
+                    className={
+                      f.feature
+                        ? "h-11 w-11 text-brass-light sm:h-14 sm:w-14"
+                        : "h-7 w-7 text-harbor sm:h-9 sm:w-9"
+                    }
+                  />
+                  <span
+                    className={`font-serif text-sm ${f.feature ? "text-linen/40" : "hidden text-ink/30 sm:inline"}`}
+                  >
+                    0{i + 1}
+                  </span>
+                </div>
+                <div className="relative">
+                  <h3
+                    className={`font-light tracking-tight ${
+                      f.feature ? "text-3xl sm:text-5xl" : "text-lg leading-snug sm:text-2xl"
+                    }`}
+                  >
+                    {f.title}
+                  </h3>
+                  <p
+                    className={`leading-relaxed ${
+                      f.feature
+                        ? "mt-2 max-w-sm text-[0.9375rem] text-linen/70 sm:mt-3 sm:text-lg"
+                        : "mt-1 text-sm text-muted-foreground sm:mt-3 sm:text-base"
+                    }`}
+                  >
+                    {f.description}
+                  </p>
+                </div>
+              </article>
+            </Reveal>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+);
 
 export default WhyChooseUs;
